@@ -3,7 +3,8 @@ import type { DefaultTheme } from "styled-components"
 const foundation = {
     color: {
         green: {
-            default: "#C5DECD"
+            default: "#C5DECD",
+            hover: "#DFECE3"
         },
         white: {
             default: "#FFFFFF"
@@ -35,7 +36,8 @@ declare module "styled-components" {
     export interface DefaultTheme {
         color: {
             green: {
-                default: string
+                default: string,
+                hover: string
             },
             white: {
                 default: string
