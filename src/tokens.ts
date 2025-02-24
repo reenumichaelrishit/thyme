@@ -81,7 +81,7 @@ const theme: DefaultTheme = {
     weight: foundation.weight,
 
     transition: {
-        default: '0.25s ease',
+        default: '0.125s ease',
     }
 }
 
