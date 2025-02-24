@@ -6,6 +6,7 @@ import Home from "./components/Home"
 import About from "./components/About"
 import { ThemeProvider } from "styled-components"
 import theme from "./tokens"
+import AccountPage from "./pages/login/AccountPage"
 
 const router = createBrowserRouter([
     {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
             {
                 path: "/about",
                 element: <About />
+            },
+            {
+                path: "/login",
+                element: <AccountPage />
             }
         ]
     }
