@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components';
+import { UserCircle, Plus} from "@phosphor-icons/react";
 
 const Wrapper = styled.div `
   position: sticky;
@@ -46,25 +47,21 @@ const HomeButton = styled(Link) `
 `;
 
 const AddPostButton = styled(Link) `
-  // height: 10vh;
-  // width: 10vh;
-  font-family: ${p => p.theme.font.content};
-  color: ${p => p.theme.color.black.default};
-  &:active{color: ${p => p.theme.color.black.default}};
-  background-color: ${p => p.theme.color.green.default};
-  // text-align: center;
-  border-radius: 50%;
-  // font-size: 4em;
-`;
-
-const ProfileButton = styled(Link) `
+  display: flex;
   font-family: ${p => p.theme.font.content};
   color: ${p => p.theme.color.black.default};
   &:active{color: ${p => p.theme.color.black.default}};
   background-color: ${p => p.theme.color.green.default};
   border-radius: 100%;
-  // font-size: 2em;
-  padding: 0.5em;
+`;
+
+const ProfileButton = styled(Link) `
+  display: flex;
+  font-family: ${p => p.theme.font.content};
+  color: ${p => p.theme.color.black.default};
+  &:active{color: ${p => p.theme.color.black.default}};
+  background-color: ${p => p.theme.color.green.default};
+  border-radius: 100%;
 `;
 
 const Nav = () => (
@@ -72,11 +69,11 @@ const Nav = () => (
     <Wrapper>
       <NavBar>
         <LeftNav>
-          <HomeButton to="/">Thyme</HomeButton>
+          <HomeButton to="/">thyme</HomeButton>
         </LeftNav>
         <RightNav>
-          <AddPostButton to="/about">+</AddPostButton>
-          <ProfileButton to="#">Profile</ProfileButton>
+          <AddPostButton to="/about"><Plus size={68} /></AddPostButton>
+          <ProfileButton to="#"><UserCircle size={68} /></ProfileButton>
         </RightNav>
       </NavBar>
       <hr></hr>
