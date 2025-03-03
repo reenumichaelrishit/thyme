@@ -42,7 +42,7 @@ const HomeButton = styled(Link) `
   &:active{color: ${p => p.theme.color.black.default}};
   background-color: ${p => p.theme.color.green.default};
   border-radius: 20%;
-  font-size: 2.1em;
+  font-size: 2em;
   padding: 0.5em;
 `;
 
