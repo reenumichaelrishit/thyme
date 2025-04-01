@@ -1,86 +1,85 @@
 import styled from "styled-components";
 import { Heart, Chat, Share, FileArrowDown} from "@phosphor-icons/react";
+import FollowButton from "./FollowButton";
 
 const Post = styled.article`
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
     // max-height: 100vh;
     width: 60vw;
-    color: ${p => p.theme.color.black.default};
-    background-color: ${p => p.theme.color.green.default};
-    font-weight: ${p => p.theme.weight.regular};
-    font-family: ${p => p.theme.font.content};
-    margin-left: 20vw;
-    margin-bottom: 20px;
-    padding: 4vw;
-    border-radius: 1vw;
-    color: black;
+    
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+    
+    padding: 5vh 4vw;
+    border-radius: 25px;
+    
+    color: ${p => p.theme.color.standard.default};
+    background-color: ${p => p.theme.background.post.default};
+    font-family: ${p => p.theme.fontFamily.content};
     
     &.imagePost {
-        max-height: 100vh;
+        // max-height: 100vh;
     }
 `
 
 const UserHeading = styled.div`
+    height: max-content;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     min-height: 40px;
-    height: 5vh;
+    font-family: ${p => p.theme.fontFamily.heading};
 `
 
-const UserNameAndPic = styled.div `
+const UserInfo = styled.div `
     display: flex;
     align-items: center;
-    gap: 10px;
+    column-gap: 10px;
     color: black;
     font-size: 1em;
+
     img {
         border-radius: 50%;
         aspect-ratio: 1 / 1;
-        height: 100%;
-        margin-right: 5px;
-    }
-`
-
-const FollowAndDropdown = styled.div`
-    display: flex;
-    align-items: center;
-    button {
-        background-color: ${p => p.theme.color.black.default};
-        color: ${p => p.theme.color.white.default};
-        height: 100%;
-        width: 5vw;
-        border-radius: 15%;
+        height: 5vh;
     }
 `
 
 const PostContent = styled.div`
-    display: flex;
-    margin-bottom: 15px;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 0.5fr;
+    grid-template-rows: 100%;
+    column-gap: 10px;
+    align-items: center;
 `
 
 const TitleAndDesc = styled.div`
-    width: 60%;
+    // width: 60%;
     h2 {
         font-size: 3em;
         margin-bottom: 10px;
+        color: ${p => p.theme.color.heading.default};
     }
 `
 
 const NutritionSummary = styled.div`
-    // todo: make li and ul
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 4vw;
-    margin-top: 15px;
+    height: max-content;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    justify-items: end;
+    align-items: stretch;
+    row-gap: 2.5vh;
+    color: ${p => p.theme.color.heading.default};
 `
 
 const NutritionCol = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
     h3 {
-        color: #410065;
+        font-family: ${p => p.theme.fontFamily.heading};
     }
 `
 
@@ -94,21 +93,28 @@ const PostImage = styled.img`
 const BottomButtonBar = styled.div `
     display: flex;
     height: 6vh;
-    justify-content: space-evenly;
-    margin-top: 15px;
+    column-gap: 1vw;
+    // justify-content: space-between;
 `
 
 const BottomButton = styled.button`
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    background-color: ${p => p.theme.color.black.default};
-    color: ${p => p.theme.color.white.default};
     height: 100%;
-    width: 10vw;
-    border-radius: 35%;
-    gap: 10px;
-    font-size: 1.5em;
+    width: 7.5vw;
+    border: 1.5px solid ${p => p.theme.color.standard.default};
+    color: ${p => p.theme.color.standard.default};
+    background-color: ${p => p.theme.background.post.default};
+    border-radius: 50px;
+    column-gap: 10px;
+    font-size: 1.25em;
+    cursor: pointer;
+    transition: background-color ${p => p.theme.transition.default};
+
+    &:hover {
+        background-color: ${p => p.theme.background.post.hover};
+    }
 `
 
 const ButtonBar = (props: {
@@ -135,36 +141,42 @@ const FeedPost = (props: {
     posterUsername: string;
     profileImage?: string;
     postImageLink: string; }) => (
-    <div>
-        <Post className = {props.postImageLink == "" ? "" : "imagePost"}>
-            <UserHeading>
-                <UserNameAndPic>
-                    <img src={props.profileImage ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}/>
-                    @{props.posterUsername}
-                </UserNameAndPic>
-                <FollowAndDropdown>
-                    <button>
-                        {props.notFollowing? "follow" : "following"}
-                    </button>
-                    <button>...</button>
-                </FollowAndDropdown>
-            </UserHeading>
-            <PostContent>
-                <TitleAndDesc>
-                    <h2>{props.title}</h2>
-                    <p>{props.desc}</p>
-                </TitleAndDesc>
-                <NutritionSummary>
-                    <NutritionCol><h3>Cal</h3> {props.calories ?? "?"}</NutritionCol>
-                    <NutritionCol><h3>Prtn</h3> {props.protein ?? "?"}</NutritionCol>
-                    <NutritionCol><h3>Carbs</h3> {props.carbs ?? "?"}</NutritionCol>
-                    <NutritionCol><h3>Fat</h3> {props.fat ?? "?"}</NutritionCol>
-                </NutritionSummary>
-            </PostContent>
-            <PostImage src={props.postImageLink} />
-            <ButtonBar likes={20} comments={4} shares={2}/>
-        </Post>
-    </div>
+    <Post className = {props.postImageLink == "" ? "" : "imagePost"}>
+        <UserHeading>
+            <UserInfo>
+                <img src={props.profileImage ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}/>
+                <span>@{props.posterUsername}</span>
+                <FollowButton following={props.notFollowing} />
+            </UserInfo>
+            <span>...</span>
+        </UserHeading>
+        <PostContent>
+            <TitleAndDesc>
+                <h2>{props.title}</h2>
+                <p>{props.desc}</p>
+            </TitleAndDesc>
+            <NutritionSummary>
+                <NutritionCol>
+                    <h3>Calories</h3>
+                    <span>{props.calories ?? "?"}</span>
+                </NutritionCol>
+                <NutritionCol>
+                    <h3>Protein</h3>
+                    <span>{props.protein ?? "?"}</span>
+                </NutritionCol>
+                <NutritionCol>
+                    <h3>Carbs</h3>
+                    <span>{props.carbs ?? "?"}</span>
+                </NutritionCol>
+                <NutritionCol>
+                    <h3>Fats</h3>
+                    <span>{props.fat ?? "?"}</span>
+                </NutritionCol>
+            </NutritionSummary>
+        </PostContent>
+        <PostImage src={props.postImageLink} />
+        <ButtonBar likes={20} comments={4} shares={2}/>
+    </Post>
 )
 
 export default FeedPost;

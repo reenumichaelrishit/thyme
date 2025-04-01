@@ -2,11 +2,12 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import {createBrowserRouter, RouterProvider } from "react-router-dom"
 import Layout from "./components/Layout"
-import Home from "./components/Home"
+import Home from "./pages/home/Home"
 import About from "./components/About"
 import { ThemeProvider } from "styled-components"
 import theme from "./tokens"
 import AccountPage from "./pages/login/AccountPage"
+import CreatePost from "./pages/create-post/CreatePost"
 
 const router = createBrowserRouter([
     {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
             {
                 path: "/login",
                 element: <AccountPage />
+            },
+            {
+                path: "/create",
+                element: <CreatePost />
             }
         ]
     }
