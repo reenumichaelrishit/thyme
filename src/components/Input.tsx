@@ -7,14 +7,14 @@ const Container = styled.div`
 
 const InputStyled = styled.input`
     padding: 2vh 1vw;
-    border: 1.5px solid ${p => p.theme.color.green.default};
+    border: 1.5px solid ${p => p.theme.color.accent.default};
     border-radius: 10px;
     letter-spacing: 0.5px;
-    color: ${p => p.theme.color.white.default};
-    background-color: ${p => p.theme.color.black.default};
+    color: ${p => p.theme.color.reversed.default};
+    background-color: ${p => p.theme.background.reversed.default};
 
     &:focus-visible {
-        outline-color: ${p => p.theme.color.green.default};
+        outline-color: ${p => p.theme.color.accent.default};
     }
 
     &:auto-fill, &:-webkit-autofill {
@@ -31,7 +31,8 @@ const LabelStyled = styled.label`
     left: 10px;
     padding: 1px 2.5px;
     border-radius: 5px;
-    background-color: ${p => p.theme.color.black.default};
+    color: ${p => p.theme.color.accent.default};
+    background-color: ${p => p.theme.background.reversed.default};
 
     &:has(+ ${InputStyled}:focus-visible) {
         font-weight: ${p => p.theme.weight.medium};

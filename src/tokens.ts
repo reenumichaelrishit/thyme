@@ -1,57 +1,101 @@
 import type { DefaultTheme } from "styled-components"
 
-const foundation = {
-    color: {
-        green: {
-            default: "#C5DECD",
-            hover: "#DFECE3"
-        },
-        white: {
-            default: "#FFFFFF"
-        },
-        black: {
-            default: "#2A2525",
-            true: "#000000"
-        },
+const lightModeFoundation = {
+    primary: {
+        default: "#22492B"
     },
-    weight: {
-        /*  FONT FAMILY             WEIGHTS
-         * - Yeseva One:            400
-         * - Schibsted Grotesk:     400-900
-         * - Barlow:                100-900
-         */
-        thin: 100,
-        extralight: 200,
-        light: 300,
-        regular: 400,
-        medium: 500,
-        semibold: 600,
-        bold: 700,
-        extrabold: 800,
-        black: 900
+    
+    secondary: {
+        default: "#147141"
+    },
+    
+    tertiary: {
+        default: "#CDE2CB",
+        hover: "#B4D3B1",
+        active: "#B4D3B1"
+    },
+    
+    background: {
+        default: "#E7EFE6",
+        hover: "#DBE7DA"
+    },
+    
+    foreground: {
+        default: "#1F1F1F",
+        hover: "#333333"
     }
+}
+
+interface ColorToken {
+    default: string,
+    hover?: string,
+    active?: string
+}
+
+const colorTokens = {
+    standard: lightModeFoundation.foreground,
+    heading: lightModeFoundation.primary,
+    accent: lightModeFoundation.tertiary,
+    reversed: lightModeFoundation.background
+}
+
+const backgroundColorTokens = {
+    standard: lightModeFoundation.tertiary,
+    navbar: lightModeFoundation.secondary,
+    post: lightModeFoundation.background,
+    reversed: lightModeFoundation.foreground
+}
+
+const fontFamilyTokens = {
+    logo: "\"Yeseva One\", serif",
+    heading: "\"Schibsted Grotesk\", sans-serif",
+    content: "\"Barlow\", sans-serif"
+}
+
+const weightTokens = {
+    /* 
+     * FONT FAMILY              WEIGHTS
+     * - Yeseva One:            400
+     * - Schibsted Grotesk:     400-900
+     * - Barlow:                100-900
+     */
+    thin: 100,
+    extralight: 200,
+    light: 300,
+    regular: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
+    extrabold: 800,
+    black: 900
+}
+
+const transitionTokens = {
+    default: '0.125s ease',
 }
 
 declare module "styled-components" {
     export interface DefaultTheme {
         color: {
-            green: {
-                default: string,
-                hover: string
-            },
-            white: {
-                default: string
-            },
-            black: {
-                default: string,
-                true: string
-            },
+            standard: ColorToken,
+            heading: ColorToken,
+            accent: ColorToken,
+            reversed: ColorToken
         },
-        font: {
+
+        background: {
+            standard: ColorToken,
+            navbar: ColorToken,
+            post: ColorToken,
+            reversed: ColorToken
+        }
+        
+        fontFamily: {
             logo: string,
             heading: string,
             content: string
         },
+        
         weight: {
             thin: number,
             extralight: number,
@@ -63,6 +107,7 @@ declare module "styled-components" {
             extrabold: number,
             black: number
         },
+        
         transition: {
             default: string,
         }
@@ -70,19 +115,11 @@ declare module "styled-components" {
 }
 
 const theme: DefaultTheme = {
-    color: foundation.color,
-
-    font: {
-        logo: "\"Yeseva One\", serif",
-        heading: "\"Schibsted Grotesk\", sans-serif",
-        content: "\"Barlow\", sans-serif",
-    },
-
-    weight: foundation.weight,
-
-    transition: {
-        default: '0.125s ease',
-    }
+    color: colorTokens,
+    background: backgroundColorTokens,
+    fontFamily: fontFamilyTokens,
+    weight: weightTokens,
+    transition: transitionTokens
 }
 
 export default theme
