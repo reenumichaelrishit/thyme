@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Outlet } from 'react-router-dom'
 import Nav from './Nav'
+import Scrollbars from 'react-custom-scrollbars-2'
 
 const GlobalStyleContainer = styled.div`
     min-height: 100vh;
@@ -13,7 +14,9 @@ const GlobalStyleContainer = styled.div`
 const Layout = () => (
     <GlobalStyleContainer>
         <Nav />
-        <Outlet />
+        <Scrollbars style={{ width: "100vw", height: "90vh" }}>
+            <Outlet />
+        </Scrollbars>
     </GlobalStyleContainer>
 )
 
