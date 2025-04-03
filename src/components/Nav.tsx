@@ -6,6 +6,7 @@ const Wrapper = styled.div `
   height: 10vh;
   position: sticky;
   top: 0;
+  z-index: 3;
 `;
 
 const NavBar = styled.div `
@@ -39,23 +40,28 @@ const HomeButton = styled(Link) `
   &:active {color: ${p => p.theme.color.accent.hover};};
 `;
 
-const AddPostButton = styled(Link) `
+const AddPostButton = styled(Link)`
   display: flex;
   justify-content: space-between;
   align-items: center;
   column-gap: 1vh;
 
   padding: 1.5vh 1vw;
-
-  font-family: ${p => p.theme.fontFamily.content};
+  border: 2.5px solid ${p => p.theme.color.accent.default};
   border-radius: 15px;
 
+  font-family: ${p => p.theme.fontFamily.content};
   color: ${p => p.theme.color.accent.default};
-  border: 2.5px solid ${p => p.theme.color.accent.default};
+  background-color: ${p => p.theme.background.navbar.default};
+  transition: background-color ${p => p.theme.transition.default};
 
   span {
     font-size: 0.625em;
     font-weight: 500;
+  }
+  
+  &:hover {
+    background-color: ${p => p.theme.background.navbar.hover};
   }
 
   &:active {
