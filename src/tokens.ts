@@ -2,11 +2,13 @@ import type { DefaultTheme } from "styled-components"
 
 const lightModeFoundation = {
     primary: {
-        default: "#22492B"
+        default: "#22492B",
+        hover: "#346F42"
     },
     
     secondary: {
-        default: "#147141"
+        default: "#147141",
+        hover: "#12683C"
     },
     
     tertiary: {
