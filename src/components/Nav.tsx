@@ -86,7 +86,7 @@ const Nav = () => (
       <NavBar>
         <HomeButton to="/">thyme</HomeButton>
         <RightNav>
-          <AddPostButton to="/about">
+          <AddPostButton to="/create">
             <Plus size={20} />
             <span>Create Post</span>
           </AddPostButton>
