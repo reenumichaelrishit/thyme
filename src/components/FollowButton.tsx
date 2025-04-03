@@ -21,7 +21,7 @@ const ButtonStyled = styled.button<{ $following: boolean }>`
     background-color: ${
         p => p.$following ?
             p.theme.background.reversed.default :
-            p.theme.background.post.default};
+            p.theme.background.standard.default};
     cursor: pointer;
     transition: background-color ${p => p.theme.transition.default};
 
@@ -29,7 +29,7 @@ const ButtonStyled = styled.button<{ $following: boolean }>`
         background-color: ${
             p => p.$following ?
                 p.theme.background.reversed.hover :
-                p.theme.background.post.hover};
+                p.theme.background.standard.hover};
         }
 `
 
