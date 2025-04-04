@@ -2,14 +2,21 @@ import type { DefaultTheme } from "styled-components"
 
 const lightModeFoundation = {
     primary: {
-        default: "#22492B"
+        default: "#22492B",
+        hover: "#346F42"
     },
     
     secondary: {
-        default: "#147141"
+        default: "#147141",
+        hover: "#12683C"
     },
     
     tertiary: {
+        default: "#93D2AA",
+        hover: "#7EC999"
+    },
+
+    quaternary: {
         default: "#CDE2CB",
         hover: "#B4D3B1",
         active: "#B4D3B1"
@@ -23,7 +30,13 @@ const lightModeFoundation = {
     foreground: {
         default: "#1F1F1F",
         hover: "#333333"
-    }
+    },
+
+    alert: {
+        warning: {
+            default: "#BD0000"
+        },
+    },
 }
 
 interface ColorToken {
@@ -35,14 +48,17 @@ interface ColorToken {
 const colorTokens = {
     standard: lightModeFoundation.foreground,
     heading: lightModeFoundation.primary,
-    accent: lightModeFoundation.tertiary,
-    reversed: lightModeFoundation.background
+    subheading: lightModeFoundation.secondary,
+    accent: lightModeFoundation.quaternary,
+    reversed: lightModeFoundation.background,
+    warning: lightModeFoundation.alert.warning,
 }
 
 const backgroundColorTokens = {
-    standard: lightModeFoundation.tertiary,
+    standard: lightModeFoundation.background,
     navbar: lightModeFoundation.secondary,
-    post: lightModeFoundation.background,
+    accent: lightModeFoundation.tertiary,
+    backdrop: lightModeFoundation.quaternary,
     reversed: lightModeFoundation.foreground
 }
 
@@ -79,14 +95,17 @@ declare module "styled-components" {
         color: {
             standard: ColorToken,
             heading: ColorToken,
+            subheading: ColorToken,
             accent: ColorToken,
-            reversed: ColorToken
+            reversed: ColorToken,
+            warning: ColorToken
         },
 
         background: {
             standard: ColorToken,
             navbar: ColorToken,
-            post: ColorToken,
+            accent: ColorToken,
+            backdrop: ColorToken,
             reversed: ColorToken
         }
         

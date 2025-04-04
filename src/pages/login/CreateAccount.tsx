@@ -1,4 +1,4 @@
-import Input from "../../components/Input"
+import { Input } from "../../components/Input"
 import { LogInSectionProps } from "./AccountPage"
 import { FormStyled, FormContainer, Heading, SubmitButton, SwitchText, FormSection } from "./styled.components"
 

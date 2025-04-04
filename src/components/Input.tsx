@@ -1,20 +1,18 @@
-import styled from "styled-components"
+import { InputHTMLAttributes, TextareaHTMLAttributes } from "react"
+import styled, { css } from "styled-components"
 
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-`
-
-const InputStyled = styled.input`
+const InputStyles = css`
+    width: 100%;
     padding: 2vh 1vw;
-    border: 1.5px solid ${p => p.theme.color.accent.default};
+    border: 2px solid ${p => p.theme.color.subheading.default};
     border-radius: 10px;
-    letter-spacing: 0.5px;
-    color: ${p => p.theme.color.reversed.default};
-    background-color: ${p => p.theme.background.reversed.default};
+    letter-spacing: 0.25px;
+    color: ${p => p.theme.color.standard.default};
+    background-color: ${p => p.theme.background.standard.default};
+    font-family: ${p => p.theme.fontFamily.content};
 
     &:focus-visible {
-        outline-color: ${p => p.theme.color.accent.default};
+        outline: 1px solid ${p => p.theme.color.subheading.default};
     }
 
     &:auto-fill, &:-webkit-autofill {
@@ -24,6 +22,22 @@ const InputStyled = styled.input`
     }
 `
 
+const Container = styled.div`
+    display: inline-flex;
+    flex-direction: column;
+`
+
+const InputStyled = styled.input`
+    ${InputStyles};
+    font-weight: ${p => p.theme.weight.medium};
+`
+
+const TextareaStyled = styled.textarea`
+    ${InputStyles};
+    resize: none;
+    overflow: hidden;
+`
+
 const LabelStyled = styled.label`
     width: fit-content;
     position: relative;
@@ -31,27 +45,85 @@ const LabelStyled = styled.label`
     left: 10px;
     padding: 1px 2.5px;
     border-radius: 5px;
-    color: ${p => p.theme.color.accent.default};
-    background-color: ${p => p.theme.background.reversed.default};
+    color: ${p => p.theme.color.subheading.default};
+    background-color: ${p => p.theme.background.standard.default};
+    font-weight: ${p => p.theme.weight.medium};
 
     &:has(+ ${InputStyled}:focus-visible) {
-        font-weight: ${p => p.theme.weight.medium};
+        font-weight: ${p => p.theme.weight.semibold};
+    }
+
+    span {
+        color: ${p => p.theme.color.warning.default};
     }
 `
 
-interface InputProps {
-    type: string,
-    label: string
+const FileInputStyled = styled.input`
+    margin: 1.5vh 0;
+    
+    letter-spacing: 0.25px;
+
+    font-weight: ${p => p.theme.weight.medium};
+    font-family: ${p => p.theme.fontFamily.content};
+    
+    &::file-selector-button {
+        padding: 0.75vh 0.75vw;
+        border: none;
+        border-radius: 10px;
+        margin-right: 0.75vw;
+
+        color: ${p => p.theme.color.subheading.default};
+        background-color: ${p => p.theme.background.accent.default};
+
+        font-weight: ${p => p.theme.weight.semibold};
+        font-family: ${p => p.theme.fontFamily.content};
+
+        cursor: pointer;
+
+        &:hover {
+            background-color: ${p => p.theme.background.accent.hover};
+        }
+    }
+`
+
+interface LabelProp { label? : string }
+interface InputProps extends LabelProp, InputHTMLAttributes<HTMLInputElement> {}
+interface TextareaProps extends LabelProp, TextareaHTMLAttributes<HTMLTextAreaElement> {}
+
+export const Input = (props: InputProps) => {
+    const { label, ...p } = props
+
+    return (
+        <Container>
+            <LabelStyled htmlFor={p.id}>
+                {label || p.id}
+                {p.required && <span>*</span>}
+            </LabelStyled>
+            <InputStyled {...p} />
+        </Container>
+    )
 }
 
-const Input = ({ type, label } : InputProps) => (
-    <Container>
-        <LabelStyled htmlFor={label}>{label}</LabelStyled>
-        <InputStyled
-            type={type}
-            id={label}
-        />
-    </Container>
-)
+export const Textarea = (props: TextareaProps) => {
+    const { label, ...p } = props
+    
+    return (
+        <Container>
+            <LabelStyled htmlFor={p.id}>
+                {label || p.id}
+                {p.required && <span>*</span>}
+            </LabelStyled>
+            <TextareaStyled {...p} />
+        </Container>
+    )
+}
 
-export default Input
+export const FileInput = (props: InputProps) => {
+    const { label, type, ...p } = props
+
+    return (
+        <Container>
+            <FileInputStyled type={"file"} {...p} />
+        </Container>
+    )
+}

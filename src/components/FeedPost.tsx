@@ -14,7 +14,7 @@ const Post = styled.article`
     border-radius: 25px;
     
     color: ${p => p.theme.color.standard.default};
-    background-color: ${p => p.theme.background.post.default};
+    background-color: ${p => p.theme.background.standard.default};
     font-family: ${p => p.theme.fontFamily.content};
     
     &.imagePost {
@@ -105,7 +105,7 @@ const BottomButton = styled.button`
     width: 7.5vw;
     border: 1.5px solid ${p => p.theme.color.standard.default};
     color: ${p => p.theme.color.standard.default};
-    background-color: ${p => p.theme.background.post.default};
+    background-color: ${p => p.theme.background.standard.default};
     border-radius: 50px;
     column-gap: 10px;
     font-size: 1.25em;
@@ -113,7 +113,7 @@ const BottomButton = styled.button`
     transition: background-color ${p => p.theme.transition.default};
 
     &:hover {
-        background-color: ${p => p.theme.background.post.hover};
+        background-color: ${p => p.theme.background.standard.hover};
     }
 `
 
