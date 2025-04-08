@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client"
 import {createBrowserRouter, RouterProvider } from "react-router-dom"
 import Layout from "./components/Layout"
 import Home from "./pages/home/Home"
-import About from "./components/About"
 import { ThemeProvider } from "styled-components"
 import theme from "./tokens"
 import AccountPage from "./pages/login/AccountPage"
@@ -17,10 +16,6 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <Home />
-            },
-            {
-                path: "/about",
-                element: <About />
             },
             {
                 path: "/login",
