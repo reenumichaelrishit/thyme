@@ -11,7 +11,7 @@ export const Overlay = styled.div<{ $newAccount : boolean }>`
     display: grid;
     grid-template-columns: ${p => p.$newAccount ? "1fr 0.7fr" : "0.7fr 1fr"};
     grid-template-rows: 1fr;
-    background-color: ${p => p.theme.background.accent.default};
+    background-color: ${p => p.theme.background.standard.default};
     z-index: 5;
 `
 
@@ -35,8 +35,9 @@ export const FormContainer = styled.div<{ $newAccount : boolean }>`
     justify-content: space-between;
     align-items: ${p => p.$newAccount ? "flex-end" : "flex-start"};
     padding: 5% 10%;
-    margin: 10% 15%;
     border: 2px solid ${p => p.theme.color.subheading.default};
+    border-radius: 15px;
+    margin: 10% 15%;
     opacity: 0.8;
     background-color: ${p => p.theme.background.standard.default};
 `
@@ -89,7 +90,6 @@ export const SubmitButton = styled.button`
 export const SwitchText = styled.span`
     margin-top: 2.5%;
     font-size: 0.875em;
-    font-weight: ${p => p.theme.weight.extralight};
     cursor: pointer;
     user-select: none;
     color: ${p => p.theme.color.subheading.default};
