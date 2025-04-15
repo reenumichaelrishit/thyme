@@ -7,6 +7,8 @@ import { ThemeProvider } from "styled-components"
 import theme from "./tokens"
 import AccountPage from "./pages/login/AccountPage"
 import CreatePost from "./pages/create-post/CreatePost"
+import ProfilePage from "./pages/profile/ProfilePage"
+import Settings from "./pages/settings/SettingsPage"
 
 const router = createBrowserRouter([
     {
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
             {
                 path: "/create",
                 element: <CreatePost />
+            },
+            {
+                path: "/profile",
+                element: <ProfilePage ownProfile = {true} />
+            },
+            {
+                path: "/settings",
+                element: <Settings />
             }
         ]
     }
