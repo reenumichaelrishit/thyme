@@ -1,5 +1,10 @@
 import styled from "styled-components"
 import PhotoWindow from "../../components/PhotoWindow";
+import { MouseEventHandler, ReactNode, useRef, useState } from "react"
+import Scrollbars from "react-custom-scrollbars-2"
+import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react"
+import ScrollContainer from "../../components/ScrollContainer";
+import Modal from "../../components/Modal";
 const Grids = styled.div `
     min-height: 90vh;
     display: grid;
@@ -21,10 +26,66 @@ const Description = styled.div `
     justify-self: center;
 `
 
+const HorizontalScrollContainer = (props: { height: string, scrollOffset: number, children: ReactNode }) => {
+    const scrollRef = useRef(null)
+
+    const getScrollWidth = () => (scrollRef.current?.getScrollLeft())
+    const scrollToLeft = () => scrollRef.current?.scrollLeft(getScrollWidth() - props.scrollOffset)
+    const scrollToRight = () => scrollRef.current?.scrollLeft(getScrollWidth() + props.scrollOffset)
+
+    return (
+        <div style={{ display: "flex", alignItems: "center" }}>
+            <CaretCircleLeft size={48} onClick={scrollToLeft} />
+            <Scrollbars
+                style={{ width: "100%", height: props.height }}
+                ref={scrollRef}
+                renderThumbVertical={() => <div style={{ display: "none" }} />}
+                renderThumbHorizontal={() => <div style={{ display: "none" }} />}
+            >
+                <div style={{ display: "flex", width: "100%", height: "100%", alignItems: "center" }}>
+                    {props.children}
+                </div>
+            </Scrollbars>
+            <CaretCircleRight size={48} onClick={scrollToRight} />
+        </div>
+    )
+}
+
+const TestDiv = styled.div `
+    display: inline-block;
+    min-width: 19vw;
+`
+
+const SavedPosts = styled.div `
+    grid-column: 1/4;
+    grid-row: 3;
+    // grid-column-gap: 10px
+`
+const UserPosts = styled.div `
+    grid-column: 1/4;
+    grid-row: 2;
+    grid-column-gap: 10px
+`
+
+const FriendsButton = styled.div `
+    grid-column: 3;
+    grid-row 1;
+    align-self: center;
+    justify-self: center;
+
+`
+
 const ProfilePage = (props: {
     ownProfile: boolean;
     profilePic?: string;
-    }) => (
+    }) =>  {
+        const [searchRes, setSearchRes] = useState(false)
+        const openSearchRes = () => setSearchRes(true)
+        const closeSearchRes : MouseEventHandler = (e) => { if (e.target === e.currentTarget) setSearchRes(false) }
+        return (
+        <>
+        <Modal show={searchRes} turnOff={closeSearchRes} />
+        <ScrollContainer>
         <Grids>
             <img src={props.profilePic ?? "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"}
                  style= {{
@@ -40,14 +101,57 @@ const ProfilePage = (props: {
                 <h3>
                     This is a description that is much longer than I have seen previously let's see how it
                 </h3>
-                <button 
-                    style={{border: "none", background: "none"}}>
-                    <u>edit</u>
-                </button>
+                {props.ownProfile ?
+                    <button 
+                        style={{border: "none", background: "none", justifySelf: "center", alignSelf: "center"}}
+                        type="button">
+                        <u>edit</u>
+                    </button>: <div/>}
             </Description>
-            <PhotoWindow title = {"Some Recipe"} />
+            <FriendsButton>
+                    <button 
+                        style={{border: "none", background: "none"}}
+                        type="button"
+                        onClick={openSearchRes}>
+                        <p style={{fontSize: "3em"}}>
+                            <u>Friends</u>
+                        </p>
+                    </button>
+            </FriendsButton>
+            <UserPosts>
+                {props.ownProfile ? <h2 style={{alignSelf: "center", justifySelf: "center"}}>Your Posts</h2> :
+                                <h2 style={{alignSelf: "center", justifySelf: "center"}}>User's Posts</h2>}
+                <HorizontalScrollContainer height={"40vh"}
+                                        scrollOffset={200}>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                </HorizontalScrollContainer>
+            </UserPosts>
+            {props.ownProfile ?
+            <SavedPosts>
+                <h2 style={{alignSelf: "center", justifySelf: "center"}}>Saved Posts</h2>
+                <HorizontalScrollContainer height={"40vh"}
+                                        scrollOffset={200}>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                </HorizontalScrollContainer>
+            </SavedPosts> : <div /> }
         </Grids>
-    )
+        </ScrollContainer>
+        </>
+    ) }
     
 
 export default ProfilePage
@@ -73,3 +177,9 @@ export default ProfilePage
                     border: "none", background: "none"}}>
                     <u>edit</u>
                 </button> */}
+
+    // const [searchRes, setSearchRes] = useState(false)
+    // const openSearchRes = () => setSearchRes(true)
+    // const closeSearchRes : MouseEventHandler = (e) => { if (e.target === e.currentTarget) setSearchRes(false) }
+
+            {/* <Modal show={searchRes} turnOff={closeSearchRes} /> */}

@@ -13,6 +13,7 @@ const ModalContainer = styled.div`
     top: 0;
     left: 0;
     background-color: #000000BB;
+    z-index: 999;
 `
 
 const ModalWindow = styled.div`
