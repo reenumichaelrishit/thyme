@@ -1,9 +1,10 @@
 import styled from "styled-components"
 import PhotoWindow from "../../components/PhotoWindow";
-import { ReactNode, useRef } from "react"
+import { MouseEventHandler, ReactNode, useRef, useState } from "react"
 import Scrollbars from "react-custom-scrollbars-2"
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react"
 import ScrollContainer from "../../components/ScrollContainer";
+import Modal from "../../components/Modal";
 const Grids = styled.div `
     min-height: 90vh;
     display: grid;
@@ -69,12 +70,21 @@ const UserPosts = styled.div `
 const FriendsButton = styled.div `
     grid-column: 3;
     grid-row 1;
+    align-self: center;
+    justify-self: center;
+
 `
 
 const ProfilePage = (props: {
     ownProfile: boolean;
     profilePic?: string;
-    }) => (
+    }) =>  {
+        const [searchRes, setSearchRes] = useState(false)
+        const openSearchRes = () => setSearchRes(true)
+        const closeSearchRes : MouseEventHandler = (e) => { if (e.target === e.currentTarget) setSearchRes(false) }
+        return (
+        <>
+        <Modal show={searchRes} turnOff={closeSearchRes} />
         <ScrollContainer>
         <Grids>
             <img src={props.profilePic ?? "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"}
@@ -93,11 +103,21 @@ const ProfilePage = (props: {
                 </h3>
                 {props.ownProfile ?
                     <button 
-                        style={{border: "none", background: "none"}}>
+                        style={{border: "none", background: "none", justifySelf: "center", alignSelf: "center"}}
+                        type="button">
                         <u>edit</u>
                     </button>: <div/>}
             </Description>
-
+            <FriendsButton>
+                    <button 
+                        style={{border: "none", background: "none"}}
+                        type="button"
+                        onClick={openSearchRes}>
+                        <p style={{fontSize: "3em"}}>
+                            <u>Friends</u>
+                        </p>
+                    </button>
+            </FriendsButton>
             <UserPosts>
                 {props.ownProfile ? <h2 style={{alignSelf: "center", justifySelf: "center"}}>Your Posts</h2> :
                                 <h2 style={{alignSelf: "center", justifySelf: "center"}}>User's Posts</h2>}
@@ -130,7 +150,8 @@ const ProfilePage = (props: {
             </SavedPosts> : <div /> }
         </Grids>
         </ScrollContainer>
-    )
+        </>
+    ) }
     
 
 export default ProfilePage
@@ -156,3 +177,9 @@ export default ProfilePage
                     border: "none", background: "none"}}>
                     <u>edit</u>
                 </button> */}
+
+    // const [searchRes, setSearchRes] = useState(false)
+    // const openSearchRes = () => setSearchRes(true)
+    // const closeSearchRes : MouseEventHandler = (e) => { if (e.target === e.currentTarget) setSearchRes(false) }
+
+            {/* <Modal show={searchRes} turnOff={closeSearchRes} /> */}
