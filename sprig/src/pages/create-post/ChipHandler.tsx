@@ -5,7 +5,7 @@ import { ChipsContainer, ChipSection, Subsubheading } from "./styled.components"
 const ChipHandler = () => {
     const [tags, setTags] = useState<Array<string>>([])
     const pushToTags = (newValue: string) => setTags([...tags, newValue])
-    const popFromTags = (oldValue: number) => setTags(tags.filter((tag, index) => index !== oldValue))
+    const popFromTags = (oldValue: number) => setTags(tags.filter((_tag, index) => index !== oldValue))
 
     return (
         <ChipsContainer>

@@ -6,3 +6,10 @@ node_modules/
 
 # Build files
 dist/
+
+# ide files
+.idea/
+
+# .env
+.env
+
