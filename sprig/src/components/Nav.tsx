@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components';
-import { UserCircle, Plus} from "@phosphor-icons/react";
+import { UserCircle, NotePencil } from "@phosphor-icons/react";
+import SearchBar from './SearchBar';
 
 const Wrapper = styled.div `
   height: 10vh;
@@ -23,11 +24,6 @@ const RightNav = styled.div `
   align-items: center;
   justify-content: flex-end;
   gap: 4vw;
-
-  * {
-    // height: 100%;
-    font-size: 2em;
-  }
 `;
 
 const HomeButton = styled(Link) `
@@ -36,38 +32,33 @@ const HomeButton = styled(Link) `
   border-radius: 20%;
   font-size: 2.5em;
   letter-spacing: -4px;
+  transition: color ${p => p.theme.transition.default};
 
-  &:active {color: ${p => p.theme.color.accent.hover};};
+  &:hover {color: ${p => p.theme.color.accent.hover};};
 `;
 
-const AddPostButton = styled(Link)`
+const AddPostButton = styled.button`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  column-gap: 1vh;
+  column-gap: 0.5vw;
 
   padding: 1.5vh 1vw;
-  border: 2.5px solid ${p => p.theme.color.accent.default};
+  border: none;
   border-radius: 15px;
 
-  font-family: ${p => p.theme.fontFamily.content};
-  color: ${p => p.theme.color.accent.default};
-  background-color: ${p => p.theme.background.navbar.default};
-  transition: background-color ${p => p.theme.transition.default};
+  font-family: ${p => p.theme.fontFamily.heading};
+  font-size: 1.125em;
+  font-weight: ${p => p.theme.weight.medium};
 
-  span {
-    font-size: 0.625em;
-    font-weight: 500;
-  }
+  cursor: pointer;
+  color: ${p => p.theme.color.heading.default};
+  background-color: ${p => p.theme.background.accent.default};
+  transition: all ${p => p.theme.transition.default};
   
   &:hover {
-    background-color: ${p => p.theme.background.navbar.hover};
+    background-color: ${p => p.theme.background.accent.hover};
   }
-
-  &:active {
-    border-color: ${p => p.theme.color.accent.hover};
-    color: ${p => p.theme.color.accent.hover};
-  };
 `;
 
 const ProfileButton = styled(Link) `
@@ -81,26 +72,21 @@ const ProfileButton = styled(Link) `
 `;
 
 const Nav = () => (
-//   <nav>
     <Wrapper>
       <NavBar>
         <HomeButton to="/">thyme</HomeButton>
         <RightNav>
-          <AddPostButton to="/create">
-            <Plus size={20} />
-            <span>Create Post</span>
-          </AddPostButton>
+          <SearchBar />
+          <Link to={"/create"}>
+            <AddPostButton type="button">
+                <NotePencil size={16} weight={"bold"} />
+                <span>Create Post</span>
+            </AddPostButton>
+          </Link>
           <ProfileButton to="#"><UserCircle size={64} /></ProfileButton>
         </RightNav>
       </NavBar>
     </Wrapper>
-//   </nav>
 )
 
 export default Nav
-
-{/* <NavBar>
-      <HomeLogo><Link to="/">HomePage</Link></HomeLogo>
-      <AddPost><Link to="/about">+</Link></AddPost>
-      <Profile><Link to="#">Profile</Link></Profile>
-      </NavBar> */}

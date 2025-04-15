@@ -1,14 +1,10 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-import {createBrowserRouter, RouterProvider } from "react-router-dom"
-import Layout from "./components/Layout"
-import Home from "./pages/home/Home"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { ThemeProvider } from "styled-components"
 import theme from "./tokens"
-import AccountPage from "./pages/login/AccountPage"
-import CreatePost from "./pages/create-post/CreatePost"
-import ProfilePage from "./pages/profile/ProfilePage"
-import Settings from "./pages/settings/SettingsPage"
+import Layout from "./components/Layout"
+import * as Pages from "./pages"
 
 const router = createBrowserRouter([
     {
@@ -17,23 +13,28 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Home />
+                element: <Pages.Home />
             },
             {
                 path: "/login",
-                element: <AccountPage />
+                element: <Pages.AccountPage />
             },
             {
                 path: "/create",
-                element: <CreatePost />
+                element: <Pages.CreatePost />
             },
             {
                 path: "/profile",
-                element: <ProfilePage ownProfile = {true} />
+                element: <Pages.ProfilePage ownProfile = {true} />
             },
             {
                 path: "/settings",
-                element: <Settings />
+                element: <Pages.Settings />
+            },
+            {
+                // Needs to be modified later
+                path: "/search-results",
+                element: <Pages.SearchResults />
             }
         ]
     }
