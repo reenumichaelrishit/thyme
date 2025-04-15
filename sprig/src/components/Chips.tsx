@@ -1,9 +1,9 @@
 import styled from "styled-components"
-import { Plus, X } from "@phosphor-icons/react"
+import { X } from "@phosphor-icons/react"
 import { useEffect, useState } from "react"
 
-const chipTypes = ["readonly", "add", "remove"] as const
-type ChipType = typeof chipTypes[number]
+// const chipTypes = ["readonly", "add", "remove"] as const
+// type ChipType = typeof chipTypes[number]
 
 interface ChipProps {
     label: string,
@@ -54,9 +54,9 @@ const IconWrapper = styled.button`
     }
 `
 
-const PlusStyled = styled(Plus)`
-    color: ${p => p.theme.color.standard.default};
-`
+// const PlusStyled = styled(Plus)`
+//     color: ${p => p.theme.color.standard.default};
+// `
 
 const XStyled = styled(X)`
     color: ${p => p.theme.color.standard.default};
@@ -64,8 +64,8 @@ const XStyled = styled(X)`
 
 /* MAKE PLUS CHIP TOO BHADWE -- diff color schema? */
 const Chip = ({ label, onClickFn } : ChipProps) => {
-    let closeTag = () => {}
-    let addTag = () => {}
+    // let closeTag = () => {}
+    // let addTag = () => {}
 
     return (
         <ChipStyled>
@@ -84,7 +84,7 @@ const Chips = ({ initialLabels, mode, append, remove } : ChipsProps) => {
 
     const removeFromLabels = (removed: number) => {
         remove && remove(removed)
-        setLabels(labels.filter((label, index) => index !== removed))
+        setLabels(labels.filter((_label, index) => index !== removed))
     }
 
     return (

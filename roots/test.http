@@ -1,0 +1,12 @@
+### This is a comment
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{ "username": "usernameunique", "password": "otherpassword" }
+
+### This is a comment
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{ "username": "usernameunique", "password": "otherpassword" }
+
