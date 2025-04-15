@@ -43,7 +43,7 @@ const DirectionList = () => {
 
     return (
         <>
-            {items.map((item, index) => (
+            {items.map((_item, index) => (
                 <Direction
                     key={`Direction-${index}`}
                     keyID={index}
