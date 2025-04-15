@@ -13,7 +13,8 @@ const lightModeFoundation = {
     
     tertiary: {
         default: "#93D2AA",
-        hover: "#7EC999"
+        hover: "#7EC999",
+        active: "#61BD83"
     },
 
     quaternary: {

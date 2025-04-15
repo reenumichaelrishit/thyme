@@ -1,11 +1,9 @@
 import styled from "styled-components"
-import { X } from "@phosphor-icons/react"
+import { Plus, X } from "@phosphor-icons/react"
 import { useEffect, useState } from "react"
 
-// const chipTypes = ["readonly", "add", "remove"] as const
-// type ChipType = typeof chipTypes[number]
-
 interface ChipProps {
+    mode: number,
     label: string,
     onClickFn: () => void
 }
@@ -54,28 +52,24 @@ const IconWrapper = styled.button`
     }
 `
 
-// const PlusStyled = styled(Plus)`
-//     color: ${p => p.theme.color.standard.default};
-// `
+const PlusStyled = styled(Plus)`
+    color: ${p => p.theme.color.standard.default};
+`
 
 const XStyled = styled(X)`
     color: ${p => p.theme.color.standard.default};
 `
 
-/* MAKE PLUS CHIP TOO BHADWE -- diff color schema? */
-const Chip = ({ label, onClickFn } : ChipProps) => {
-    // let closeTag = () => {}
-    // let addTag = () => {}
-
-    return (
-        <ChipStyled>
-            <IconWrapper type="button" onClick={onClickFn}>
-                <XStyled size={12} />
-            </IconWrapper>
-            <span>{label}</span>
-        </ChipStyled>
-    )
-}
+const Chip = ({ mode, label, onClickFn } : ChipProps) => (
+    <ChipStyled>
+        <IconWrapper type="button" onClick={onClickFn}>
+            {mode == 0 ?
+                <XStyled size={12} weight={"bold"} /> :
+                <PlusStyled size={12} weight={"bold"} />}
+        </IconWrapper>
+        <span>{label}</span>
+    </ChipStyled>
+)
 
 const Chips = ({ initialLabels, mode, append, remove } : ChipsProps) => {
     const [labels, setLabels] = useState(initialLabels)
@@ -91,6 +85,7 @@ const Chips = ({ initialLabels, mode, append, remove } : ChipsProps) => {
         <ChipsContainer>
             {labels.map((label, index) => (
                 <Chip
+                    mode={mode}
                     label={label}
                     key={`Chip-${index}`}
                     onClickFn={

@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import Scrollbars from "react-custom-scrollbars-2";
 
-const ScrollContainer = ({ children }: { children: ReactNode}) => (
-    <Scrollbars style={{ width: "100vw", height: "90vh" }}>
-        {children}
+const ScrollContainer = (props: { children: ReactNode, width?: string, height?: string }) => (
+    <Scrollbars style={{ width: props.width || "100vw", height: props.height || "90vh" }}>
+        {props.children}
     </Scrollbars>
 )
 
