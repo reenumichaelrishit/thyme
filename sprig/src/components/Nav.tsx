@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components';
-import { UserCircle, NotePencil } from "@phosphor-icons/react";
+import { UserCircle, NotePencil, Sun, Moon } from "@phosphor-icons/react";
 import SearchBar from './SearchBar';
+import { useState } from 'react';
+import Menu from './Menu';
+import Toggle from './Toggle';
 
 const Wrapper = styled.div `
   height: 10vh;
@@ -71,22 +74,39 @@ const ProfileButton = styled(Link) `
   border-radius: 100%;
 `;
 
-const Nav = () => (
-    <Wrapper>
-      <NavBar>
-        <HomeButton to="/">thyme</HomeButton>
-        <RightNav>
-          <SearchBar />
-          <Link to={"/create"}>
-            <AddPostButton type="button">
-                <NotePencil size={16} weight={"bold"} />
-                <span>Create Post</span>
-            </AddPostButton>
-          </Link>
-          <ProfileButton to="#"><UserCircle size={64} /></ProfileButton>
-        </RightNav>
-      </NavBar>
-    </Wrapper>
-)
+const Nav = () => {
+    const [viewProfileMenu, setViewProfileMenu] = useState(false)
+    const openProfileMenu = () => setViewProfileMenu(true)
+    const closeProfileMenu = () => setViewProfileMenu(false)
+
+    return (
+        <Wrapper>
+        <NavBar>
+            <HomeButton to="/">thyme</HomeButton>
+            <RightNav>
+                <SearchBar />
+                <Link to={"/create"}>
+                    <AddPostButton type="button">
+                        <NotePencil size={16} weight={"bold"} />
+                        <span>Create Post</span>
+                    </AddPostButton>
+                </Link>
+                <ProfileButton to="#" onMouseEnter={openProfileMenu} onMouseLeave={closeProfileMenu}>
+                    <UserCircle size={64} />
+                </ProfileButton>
+
+                <Menu view={viewProfileMenu} items={[
+                    [<Toggle
+                        leftSlot={<Sun size={24} />}
+                        rightSlot={<Moon size={24} />}
+                    />, ""],
+                    ["Profile", "/profile"],
+                    ["Settings", "/settings"]
+                ]}/>
+            </RightNav>
+        </NavBar>
+        </Wrapper>
+    )
+}
 
 export default Nav
