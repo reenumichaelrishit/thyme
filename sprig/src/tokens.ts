@@ -25,12 +25,14 @@ const lightModeFoundation = {
     
     background: {
         default: "#E7EFE6",
-        hover: "#DBE7DA"
+        hover: "#DBE7DA",
+        active: "#CFDFCD"
     },
     
     foreground: {
         default: "#1F1F1F",
-        hover: "#333333"
+        hover: "#292929",
+        active: "#333333"
     },
 
     alert: {
