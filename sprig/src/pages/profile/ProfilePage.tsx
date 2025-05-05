@@ -27,11 +27,11 @@ const Description = styled.div `
 `
 
 const HorizontalScrollContainer = (props: { height: string, scrollOffset: number, children: ReactNode }) => {
-    const scrollRef = useRef(null)
+    const scrollRef = useRef<Scrollbars>(null)
 
     const getScrollWidth = () => (scrollRef.current?.getScrollLeft())
-    const scrollToLeft = () => scrollRef.current?.scrollLeft(getScrollWidth() - props.scrollOffset)
-    const scrollToRight = () => scrollRef.current?.scrollLeft(getScrollWidth() + props.scrollOffset)
+    const scrollToLeft = () => scrollRef.current?.scrollLeft(getScrollWidth()! - props.scrollOffset)
+    const scrollToRight = () => scrollRef.current?.scrollLeft(getScrollWidth()! + props.scrollOffset)
 
     return (
         <div style={{ display: "flex", alignItems: "center" }}>
