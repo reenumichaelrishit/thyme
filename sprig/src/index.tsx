@@ -14,7 +14,6 @@ function App() {
     console.log(`username: ${userName}`);
     useEffect(() => {
         setUserName("me");
-        setAuthToken("");
     }, []); // Empty dependency array: runs once on mount
 
     return (
@@ -26,7 +25,7 @@ function App() {
                 />
                 <Route
                     path="/login"
-                    element={<Pages.AccountPage />}
+                    element={<Pages.AccountPage setAuthToken={setAuthToken}/>}
                 />
                 <Route
                     path="/create"
