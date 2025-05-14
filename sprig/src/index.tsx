@@ -8,17 +8,17 @@ import * as Pages from "./pages"
 import {ProtectedRoute} from "./components/ProtectedRoute.tsx";
 
 function App() {
-    const [userName, setUserName] = useState("Jane Doe");
+    const [email, setEmail] = useState("Jane Doe");
     const [authToken, setAuthToken] = useState("");
 
-    console.log(`username: ${userName}`);
+    console.log(`username: ${email}`);
     useEffect(() => {
-        setUserName("me");
+        setEmail("me");
     }, []); // Empty dependency array: runs once on mount
 
     return (
         <Routes>
-            <Route path="/" element={<Layout />}>
+            <Route path="/" element={<Layout authToken={authToken}/>}>
                 <Route
                     index
                     element={<Pages.Home />}

@@ -64,17 +64,17 @@ const AddPostButton = styled.button`
   }
 `;
 
-const ProfileButton = styled(Link) `
-  display: flex;
-  font-family: ${p => p.theme.fontFamily.content};
-
-  color: ${p => p.theme.color.accent.default};
-  &:active {color: ${p => p.theme.color.accent.hover};};
-
-  border-radius: 100%;
+const ProfileButton = styled(Link)`
+    display: flex;
+    font-family: ${p => p.theme.fontFamily.content};
+    
+    color: ${p => p.theme.color.accent.default};
+    &:active {color: ${p => p.theme.color.accent.hover};};
+    
+    border-radius: 100%;
 `;
 
-const Nav = () => {
+const Nav = ({ authToken }: { authToken: string }) => {
     const [viewProfileMenu, setViewProfileMenu] = useState(false)
     const openProfileMenu = () => setViewProfileMenu(true)
     const closeProfileMenu = () => setViewProfileMenu(false)
@@ -91,10 +91,12 @@ const Nav = () => {
                         <span>Create Post</span>
                     </AddPostButton>
                 </Link>
-                <ProfileButton to="#" onMouseEnter={openProfileMenu} onMouseLeave={closeProfileMenu}>
-                    <UserCircle size={64} />
-                </ProfileButton>
-
+                {
+                    authToken ?
+                    <ProfileButton to="#" onMouseEnter={openProfileMenu} onMouseLeave={closeProfileMenu}>
+                        <UserCircle size={64} />
+                    </ProfileButton> : <ProfileButton to="/login">Log In</ProfileButton>
+                }
                 <Menu view={viewProfileMenu} items={[
                     [<Toggle
                         leftSlot={<Sun size={24} />}

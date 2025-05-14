@@ -6,6 +6,33 @@ import {CredentialsProvider} from "../CredentialsProvider";
 
 dotenv.config();
 
+const signatureKey = process.env.JWT_SECRET as string;
+if (!signatureKey) {
+    throw new Error("Missing JWT_SECRET from env file");
+}
+
+export function verifyAuthToken(
+    req: Request,
+    res: Response,
+    next: NextFunction // Call next() to run the next middleware or request handler
+) {
+    const authHeader = req.get("Authorization");
+    // The header should say "Bearer <token string>".  Discard the Bearer part.
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (!token) {
+        res.status(401).end();
+    } else { // signatureKey already declared as a module-level variable
+        jwt.verify(token, signatureKey, (error, decoded) => {
+            if (decoded) {
+                next();
+            } else {
+                res.status(403).end();
+            }
+        });
+    }
+}
+
 function generateAuthToken(username: string): Promise<string> {
     const signatureKey: string | undefined= process.env.JWT_SECRET;
     if (!signatureKey) {
