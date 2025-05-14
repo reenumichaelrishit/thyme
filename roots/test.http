@@ -2,7 +2,7 @@
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 
-{ "username": "usernameunique", "password": "otherpassword" }
+{ "username": "reenus3", "password": "otherpassword" }
 
 ### This is a comment
 POST http://localhost:3000/auth/login

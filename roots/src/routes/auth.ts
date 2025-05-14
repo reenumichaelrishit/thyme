@@ -32,8 +32,7 @@ export function registerAuthRoutes(app: express.Application, sbClient: SupabaseC
                 error: "Bad request",
                 message: "Missing username or password"
             });
-        }
-        else {
+        } else {
             const credP = new CredentialsProvider(sbClient)
 
             credP.registerUser(req.body.username, req.body.password).then(available => {
@@ -42,10 +41,18 @@ export function registerAuthRoutes(app: express.Application, sbClient: SupabaseC
                         error: "Bad request",
                         message: "Username already taken"
                     });
-                }
-                else {
-                    const token = generateAuthToken(req.body.username)
-                    res.status(201).send({token: token})
+                } else {
+                    credP.addToUsers(req.body.username).then(async user => {
+                        if (!user) {
+                            res.status(400).send({
+                                error: "Bad request",
+                                message: "Username already taken"
+                            });
+                        } else {
+                            const token = await generateAuthToken(req.body.username)
+                            res.status(201).send({token: token})
+                        }
+                    })
                 }
             })
         }
@@ -58,17 +65,14 @@ export function registerAuthRoutes(app: express.Application, sbClient: SupabaseC
                 error: "Bad request",
                 message: "Did not provide username or password"
             });
-        }
-        else {
+        } else {
             const credP = new CredentialsProvider(sbClient)
 
-            credP.verifyPassword(username, password).then(matches =>
-            {
-                if(matches) {
-                    const token = generateAuthToken(username)
+            credP.verifyPassword(username, password).then(async matches => {
+                if (matches) {
+                    const token = await generateAuthToken(username)
                     res.status(200).send({token: token})
-                }
-                else res.status(401).send({
+                } else res.status(401).send({
                     error: "Bad request",
                     message: "Incorrect username or password"
                 });
