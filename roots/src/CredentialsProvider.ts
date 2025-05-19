@@ -4,12 +4,17 @@ import { SupabaseClient } from "@supabase/supabase-js";
 export class CredentialsProvider {
     private readonly sb: SupabaseClient;
     private readonly credTableName: string;
+    private readonly usersTableName: string;
 
     constructor(sbClient: SupabaseClient) {
         if (!process.env.CREDS_COLLECTION_NAME) {
             throw new Error("Missing CREDS_COLLECTION_NAME from env file");
         }
+        if (!process.env.USERS_COLLECTION_NAME) {
+            throw new Error("Missing USERS_COLLECTION_NAME from env file");
+        }
         this.credTableName = process.env.CREDS_COLLECTION_NAME;
+        this.usersTableName = process.env.USERS_COLLECTION_NAME;
         this.sb = sbClient;
     }
 
@@ -25,7 +30,19 @@ export class CredentialsProvider {
         const { status } = await this.sb.from(this.credTableName).insert(
             { username: username, password: hashedPassword },
         );
-        // console.log(`status is ${status}`)
+
+        return status === 201;
+    }
+
+    async addToUsers(username: string) {
+        const { data, error } = await this.sb.from(this.usersTableName).select("username").eq("username", username).maybeSingle()
+        if (data) {
+            return false;
+        }
+
+        const { status } = await this.sb.from(this.usersTableName).insert(
+            { username: username },
+        );
 
         return status === 201;
     }

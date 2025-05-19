@@ -1,8 +1,8 @@
 import styled from "styled-components"
-import { Link } from 'react-router-dom'
-import { UserCircle} from "@phosphor-icons/react";
+import {Link} from 'react-router-dom'
+import {UserCircle} from "@phosphor-icons/react";
 
-const Grids = styled.div `
+const Grids = styled.div`
     min-height: 90vh;
     display: grid;
     grid-template-columns: auto auto auto auto;
@@ -15,14 +15,14 @@ const Grids = styled.div `
     // }
 `
 
-const Header = styled.div `
+const Header = styled.div`
     grid-column: 1 / 5;
     grid-row: 1;
     justify-self: center;
     align-self: center;
 `
 
-const Name = styled.div `
+const Name = styled.div`
     grid-column: 2;
     grid-row: 2;
     justify-self: center;
@@ -34,7 +34,7 @@ const Name = styled.div `
     flex-flow: column wrap;
     line-height: 4.5vh
 `
-const Email = styled.div `
+const Email = styled.div`
     grid-column: 2;
     grid-row: 3;
     justify-self: center;
@@ -47,7 +47,7 @@ const Email = styled.div `
     line-height: 4.5vh
 `
 
-const Password = styled.div `
+const Password = styled.div`
     grid-column: 2;
     grid-row: 4;
     justify-self: center;
@@ -60,7 +60,7 @@ const Password = styled.div `
     line-height: 4.5vh
 `
 
-const Profile = styled.div `
+const Profile = styled.div`
     grid-column: 3;
     grid-row: 2 / 5;
     justify-self: center;
@@ -72,7 +72,11 @@ const Profile = styled.div `
     flex-flow: column wrap;
 `
 
-const Settings = () => (
+interface SettingsProps {
+    userName?: string
+}
+
+const Settings = ({userName}: SettingsProps) => (
     <Grids>
         <Header>
             <h1>
@@ -84,7 +88,7 @@ const Settings = () => (
                 Username
             </h3>
             <h2>
-                sample_username
+                {userName}
             </h2>
             <Link to="home" className="link">
                 change username
@@ -114,7 +118,7 @@ const Settings = () => (
         </Password>
         <Profile>
             <h2>Profile Picture</h2>
-            <UserCircle size={256} />
+            <UserCircle size={256}/>
             <Link to="home" className="link">
                 change picture
             </Link>

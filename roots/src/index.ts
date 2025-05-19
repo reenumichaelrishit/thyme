@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
 import { createClient } from '@supabase/supabase-js'
-import { registerAuthRoutes } from "./routes/auth";
+import {registerAuthRoutes, verifyAuthToken} from "./routes/auth";
 
 const cors = require("cors");
 
@@ -34,6 +34,8 @@ registerAuthRoutes(app, supabase);
 app.get("/hello", (req: Request, res: Response) => {
     res.send("Hello, World");
 });
+
+app.use("/api/*", verifyAuthToken);
 
 app.get("*", (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, "../../sprig/dist/index.html"));
