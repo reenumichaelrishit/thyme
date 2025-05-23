@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Outlet } from 'react-router-dom'
 import Nav from './Nav'
+import { useAuth } from '../authContext'
 
 const GlobalStyleContainer = styled.div`
     min-height: 100vh;
@@ -10,11 +11,15 @@ const GlobalStyleContainer = styled.div`
     font-family: ${p => p.theme.fontFamily.content};
 `
 
-const Layout = ({ authToken }: { authToken: string }) => (
-    <GlobalStyleContainer>
-        <Nav authToken={authToken}/>
-        <Outlet />
-    </GlobalStyleContainer>
-)
+const Layout = () => {
+    const { authToken } = useAuth()
+
+    return (
+        <GlobalStyleContainer>
+            <Nav authToken={authToken} />
+            <Outlet />
+        </GlobalStyleContainer>
+    )
+}
 
 export default Layout

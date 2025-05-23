@@ -4,9 +4,11 @@ import { FormStyled, FormContainer, Heading, SubmitButton, SwitchText, FormSecti
 import {sendPostRequest} from "../../fetches/sendPostRequest.tsx";
 import {useNavigate} from "react-router-dom";
 import React from "react";
+import { useAuth } from "../../authContext.ts";
 
-const CreateAccount = ({ newAccount, setNewAccount, setAuthToken } : LogInSectionProps) => {
-    const navigate = useNavigate();
+const CreateAccount = ({ newAccount, setNewAccount } : LogInSectionProps) => {
+    const navigate = useNavigate()
+    const { setUsername, setAuthToken } = useAuth()
 
     async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -30,6 +32,7 @@ const CreateAccount = ({ newAccount, setNewAccount, setAuthToken } : LogInSectio
 
         if (result.token) {
             setAuthToken(result.token);
+            setUsername(username);
             navigate("/");
         } else {
             console.error("Token not found in result:", result);
