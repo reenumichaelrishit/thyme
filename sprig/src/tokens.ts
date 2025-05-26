@@ -1,6 +1,25 @@
 import type { DefaultTheme } from "styled-components"
 
-const lightModeFoundation = {
+interface ColorToken {
+    default: string,
+    hover?: string,
+    active?: string
+}
+
+interface ColorFoundation {
+    primary: ColorToken,
+    secondary: ColorToken,
+    tertiary: ColorToken,
+    quaternary: ColorToken,
+    background: ColorToken,
+    foreground: ColorToken,
+    alert: {
+        warning: ColorToken,
+        like: ColorToken
+    }
+}
+
+const lightModeFoundation: ColorFoundation = {
     primary: {
         default: "#22492B",
         hover: "#346F42"
@@ -39,31 +58,76 @@ const lightModeFoundation = {
         warning: {
             default: "#BD0000"
         },
+
+        like: {
+            default: "#D23742"
+        }
     },
 }
 
-interface ColorToken {
-    default: string,
-    hover?: string,
-    active?: string
+const darkModeFoundation: ColorFoundation = {
+    primary: {
+        default: "#BADEC2",
+        hover: "#346F42"
+    },
+    
+    secondary: {
+        default: "#97EDC0",
+        hover: "#12683C"
+    },
+    
+    tertiary: {
+        default: "#307349",
+        hover: "#7EC999",
+        active: "#61BD83"
+    },
+
+    quaternary: {
+        default: "#274125",
+        hover: "#B4D3B1",
+        active: "#B4D3B1"
+    },
+    
+    background: {
+        default: "#1F1F1F",
+        hover: "#DBE7DA",
+        active: "#CFDFCD"
+    },
+    
+    foreground: {
+        default: "#E7EFE6",
+        hover: "#292929",
+        active: "#333333"
+    },
+
+    alert: {
+        warning: {
+            default: "#BD0000"
+        },
+
+        like: {
+            default: "#D23742"
+        }
+    },
 }
 
-const colorTokens = {
-    standard: lightModeFoundation.foreground,
-    heading: lightModeFoundation.primary,
-    subheading: lightModeFoundation.secondary,
-    accent: lightModeFoundation.quaternary,
-    reversed: lightModeFoundation.background,
-    warning: lightModeFoundation.alert.warning,
-}
+const getColorTokens = (colorFoundation: ColorFoundation) => ({
+    standard: colorFoundation.foreground,
+    heading: colorFoundation.primary,
+    subheading: colorFoundation.secondary,
+    accent: colorFoundation.quaternary,
+    reversed: colorFoundation.background,
+    warning: colorFoundation.alert.warning,
+    like: colorFoundation.alert.like
+})
 
-const backgroundColorTokens = {
-    standard: lightModeFoundation.background,
-    navbar: lightModeFoundation.secondary,
-    accent: lightModeFoundation.tertiary,
-    backdrop: lightModeFoundation.quaternary,
-    reversed: lightModeFoundation.foreground
-}
+const getBackgroundColorTokens = (colorFoundation: ColorFoundation) => ({
+    standard: colorFoundation.background,
+    navbar: colorFoundation.secondary,
+    accent: colorFoundation.tertiary,
+    backdrop: colorFoundation.quaternary,
+    reversed: colorFoundation.foreground
+})
 
 const fontFamilyTokens = {
     logo: "\"Yeseva One\", serif",
@@ -101,7 +165,8 @@ declare module "styled-components" {
             subheading: ColorToken,
             accent: ColorToken,
             reversed: ColorToken,
-            warning: ColorToken
+            warning: ColorToken,
+            like: ColorToken
         },
 
         background: {
@@ -136,12 +201,18 @@ declare module "styled-components" {
     }
 }
 
-const theme: DefaultTheme = {
-    color: colorTokens,
-    background: backgroundColorTokens,
+export const LightMode: DefaultTheme = {
+    color: getColorTokens(lightModeFoundation),
+    background: getBackgroundColorTokens(lightModeFoundation),
     fontFamily: fontFamilyTokens,
     weight: weightTokens,
     transition: transitionTokens
 }
 
-export default theme
+export const DarkMode: DefaultTheme = {
+    color: getColorTokens(darkModeFoundation),
+    background: getBackgroundColorTokens(darkModeFoundation),
+    fontFamily: fontFamilyTokens,
+    weight: weightTokens,
+    transition: transitionTokens
+}

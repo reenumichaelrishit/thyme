@@ -2,14 +2,14 @@ import { ReactNode, useState } from "react"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 
-const MenuStyled = styled.div`
+const MenuStyled = styled.div<{ $top?: string, $right?: string }>`
     width: max-content;
     height: auto;
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 10vh;
-    right: 2.5vh;
+    top: ${p => p.$top || "0"};
+    right: ${p => p.$right || "0"};
     padding: 1vh 0;
     border-radius: 7.5px;
     color: ${p => p.theme.color.standard.default};
@@ -27,23 +27,29 @@ const MenuItem = styled.div`
 `
 
 const MenuItemLink = styled(Link)`
-    color: ${p => p.theme.color.standard.default};
-    background-color: ${p => p.theme.background.standard.default};
-    transition: all ${p => p.theme.transition.default};
+    
 
-    &:hover {
-        background-color: ${p => p.theme.background.standard.hover};
-    }
+    & * {
+        color: ${p => p.theme.color.standard.default};
+        background-color: ${p => p.theme.background.standard.default};
+        transition: all ${p => p.theme.transition.default};
 
-    &:active {
-        color: ${p => p.theme.color.standard.active};
-        background-color: ${p => p.theme.background.standard.active};
+        &:hover {
+            background-color: ${p => p.theme.background.standard.hover};
+        }
+
+        &:active {
+            color: ${p => p.theme.color.standard.active};
+            background-color: ${p => p.theme.background.standard.active};
+        }
     }
 `
 
 interface MenuProps {
     view: boolean,
-    items: Array<[ReactNode, string]>
+    items: Array<[ReactNode, string]>,
+    top?: string,
+    right?: string
 }
 
 const Menu = (props: MenuProps) => {
@@ -55,6 +61,8 @@ const Menu = (props: MenuProps) => {
         <MenuStyled
             onMouseEnter={startHovering}
             onMouseLeave={stopHovering}
+            $top={props.top}
+            $right={props.right}
         >
             {props.items.map((item, index) => {
                 return item[1] !== "" ? (

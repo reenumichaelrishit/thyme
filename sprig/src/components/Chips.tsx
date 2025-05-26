@@ -10,7 +10,7 @@ interface ChipProps {
 
 interface ChipsProps {
     initialLabels: Array<string>,
-    mode: number, // If 0, it is view mode. If 1, it is add mode.
+    mode: number, // If 0, it is view mode. If 1, it is add mode. If 2, it is read-only.
     append?: (value: string) => void // Required for add mode
     remove?: (index: number) => void
 }
@@ -62,11 +62,12 @@ const XStyled = styled(X)`
 
 const Chip = ({ mode, label, onClickFn } : ChipProps) => (
     <ChipStyled>
-        <IconWrapper type="button" onClick={onClickFn}>
+        {mode != 2 &&
+            <IconWrapper type="button" onClick={onClickFn}>
             {mode == 0 ?
                 <XStyled size={12} weight={"bold"} /> :
                 <PlusStyled size={12} weight={"bold"} />}
-        </IconWrapper>
+            </IconWrapper>}
         <span>{label}</span>
     </ChipStyled>
 )
@@ -91,10 +92,12 @@ const Chips = ({ initialLabels, mode, append, remove } : ChipsProps) => {
                     onClickFn={
                         mode == 0 ?
                             () => removeFromLabels(index) :
-                            () => {
-                                append && append(labels[index])
-                                removeFromLabels(index)
-                            }
+                            mode == 1 ?
+                                () => {
+                                    append && append(labels[index])
+                                    removeFromLabels(index)
+                                } :
+                                () => {}
                     }
                 />
             ))}

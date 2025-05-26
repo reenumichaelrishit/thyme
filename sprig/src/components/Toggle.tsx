@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react"
+import { ReactNode } from "react"
 import styled from "styled-components"
 
 const ToggleContainer = styled.div`
@@ -39,24 +39,21 @@ const Thumb = styled.div<{ $toggled : boolean }>`
 `
 
 interface ToggleProps {
+    toggled: boolean,
+    toggle: () => void,
     leftSlot?: ReactNode,
     rightSlot?: ReactNode
 }
 
 // STATE IS NOT SAVED UNLESS IT IS PASSED? CHECK!s
-const Toggle = (props: ToggleProps) => {
-    const [toggled, setToggled] = useState(false)
-    const toggle = () => setToggled(!toggled)
-
-    return (
-        <ToggleContainer>
-            {props.leftSlot && props.leftSlot}
-            <ToggleBar onClick={toggle}>
-                <Thumb $toggled={toggled} />
-            </ToggleBar>
-            {props.rightSlot && props.rightSlot}
-        </ToggleContainer>
-    )
-}
+const Toggle = (props: ToggleProps) => (
+    <ToggleContainer>
+        {props.leftSlot && props.leftSlot}
+        <ToggleBar onClick={props.toggle}>
+            <Thumb $toggled={props.toggled} />
+        </ToggleBar>
+        {props.rightSlot && props.rightSlot}
+    </ToggleContainer>
+)
 
 export default Toggle

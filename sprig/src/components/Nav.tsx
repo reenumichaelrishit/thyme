@@ -1,10 +1,12 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components';
-import { UserCircle, NotePencil, Sun, Moon } from "@phosphor-icons/react";
+import { UserCircle, NotePencil, Sun, Moon, SignIn } from "@phosphor-icons/react";
 import SearchBar from './SearchBar';
 import { useState } from 'react';
 import Menu from './Menu';
 import Toggle from './Toggle';
+import { useTheme } from '../ThemeContext';
+import { useAuth } from '../AuthContext';
 
 const Wrapper = styled.div `
   height: 10vh;
@@ -14,6 +16,7 @@ const Wrapper = styled.div `
 `;
 
 const NavBar = styled.div `
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,7 +29,7 @@ const RightNav = styled.div `
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: 4vw;
+  column-gap: 2vw;
 `;
 
 const HomeButton = styled(Link) `
@@ -74,10 +77,14 @@ const ProfileButton = styled(Link)`
     border-radius: 100%;
 `;
 
-const Nav = ({ authToken }: { authToken: string }) => {
+const Nav = () => {
+    const navigate = useNavigate()
+    const { isDarkMode, toggleTheme } = useTheme()
+    const { authToken } = useAuth()
+
     const [viewProfileMenu, setViewProfileMenu] = useState(false)
     const openProfileMenu = () => setViewProfileMenu(true)
-    const closeProfileMenu = () => setViewProfileMenu(false)
+    const closeProfileMenu = () => setTimeout(() => setViewProfileMenu(false), 250)
 
     return (
         <Wrapper>
@@ -85,20 +92,25 @@ const Nav = ({ authToken }: { authToken: string }) => {
             <HomeButton to="/">thyme</HomeButton>
             <RightNav>
                 <SearchBar />
-                <Link to={"/create"}>
-                    <AddPostButton type="button">
+                {authToken ?
+                    <AddPostButton type="button" onClick={() => navigate("/create")}>
                         <NotePencil size={16} weight={"bold"} />
                         <span>Create Post</span>
-                    </AddPostButton>
-                </Link>
-                {
-                    authToken ?
+                    </AddPostButton> :
+                    <></>}
+                {authToken ?
                     <ProfileButton to="#" onMouseEnter={openProfileMenu} onMouseLeave={closeProfileMenu}>
                         <UserCircle size={64} />
-                    </ProfileButton> : <ProfileButton to="/login">Log In</ProfileButton>
+                    </ProfileButton> :
+                    <AddPostButton type="button" onClick={() => navigate("/login")}>
+                        <SignIn size={16} weight={"bold"} />
+                        <span>Log In</span>
+                    </AddPostButton>
                 }
-                <Menu view={viewProfileMenu} items={[
+                <Menu view={viewProfileMenu} top="11.5vh" right="20vw" items={[
                     [<Toggle
+                        toggled={isDarkMode}
+                        toggle={toggleTheme}
                         leftSlot={<Sun size={24} />}
                         rightSlot={<Moon size={24} />}
                     />, ""],

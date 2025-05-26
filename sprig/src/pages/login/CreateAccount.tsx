@@ -4,7 +4,7 @@ import { FormStyled, FormContainer, Heading, SubmitButton, SwitchText, FormSecti
 import {sendPostRequest} from "../../fetches/sendPostRequest.tsx";
 import {useNavigate} from "react-router-dom";
 import React from "react";
-import { useAuth } from "../../authContext.ts";
+import { useAuth } from "../../AuthContext.ts";
 
 const CreateAccount = ({ newAccount, setNewAccount } : LogInSectionProps) => {
     const navigate = useNavigate()
