@@ -107,7 +107,7 @@ const Nav = () => {
                         <span>Log In</span>
                     </AddPostButton>
                 }
-                <Menu view={viewProfileMenu} top="11.5vh" right="20vw" items={[
+                <Menu view={viewProfileMenu} top="11vh" right="4vw" items={[
                     [<Toggle
                         toggled={isDarkMode}
                         toggle={toggleTheme}
