@@ -14,9 +14,9 @@ export class ProfileProvider {
 
     async getProfile(username: string) {
         const { data, error } = await this.sb.from(this.profileTableName)
-            .select("username")
+            .select()
             .eq("username", username)
-            .maybeSingle()
+        if (error) throw new Error("Can't find user");
         return data;
     }
 }

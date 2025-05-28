@@ -27,7 +27,7 @@ export function registerProfileRoutes(app: express.Application, sbClient: Supaba
                             });
                         }
                         else {
-                            res.status(201).send({data})
+                            res.status(200).send({data})
                         }
                     })
                     // (profile)=>{res.status(200).send{profile})
