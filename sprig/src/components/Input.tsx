@@ -23,6 +23,7 @@ const InputStyles = css`
 `
 
 const Container = styled.div`
+    width: 100%;
     display: inline-flex;
     flex-direction: column;
 `

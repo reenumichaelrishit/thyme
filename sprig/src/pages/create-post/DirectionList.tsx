@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Input } from "../../components/Input"
 import { AddButton, DirectionContainer, RemoveButton } from "./styled.components"
 import { X } from "@phosphor-icons/react"
@@ -29,8 +29,10 @@ const Direction = ({ keyID, remove, allItems, setItems, handleChange } : Ingredi
     )
 }
 
-const DirectionList = () => {
-    const [items, setItems] = useState([""])
+const DirectionList = ({ items, setItems } : {
+    items: Array<string>,
+    setItems: Dispatch<SetStateAction<Array<string>>>
+}) => {
     const removeItem = (index: number) => setItems(items.slice(0, index).concat(items.slice(index + 1)))
     const handleChange = (
         id: number,

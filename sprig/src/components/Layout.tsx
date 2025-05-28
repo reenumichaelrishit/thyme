@@ -10,9 +10,9 @@ const GlobalStyleContainer = styled.div`
     font-family: ${p => p.theme.fontFamily.content};
 `
 
-const Layout = ({ authToken }: { authToken: string }) => (
+const Layout = () => (
     <GlobalStyleContainer>
-        <Nav authToken={authToken}/>
+        <Nav />
         <Outlet />
     </GlobalStyleContainer>
 )

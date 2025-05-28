@@ -1,9 +1,11 @@
-import { useState } from "react"
+import { Dispatch, SetStateAction } from "react"
 import Chips from "../../components/Chips"
 import { ChipsContainer, ChipSection, Subsubheading } from "./styled.components"
 
-const ChipHandler = () => {
-    const [tags, setTags] = useState<Array<string>>([])
+const ChipHandler = ({ tags, setTags } : {
+    tags: Array<string>,
+    setTags: Dispatch<SetStateAction<Array<string>>>
+}) => {
     const pushToTags = (newValue: string) => setTags([...tags, newValue])
     const popFromTags = (oldValue: number) => setTags(tags.filter((_tag, index) => index !== oldValue))
 

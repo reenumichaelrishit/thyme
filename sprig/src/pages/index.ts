@@ -4,6 +4,7 @@ import Home from "./home/Home"
 import ProfilePage from "./profile/ProfilePage"
 import SearchResults from "./search-results/SearchResults"
 import Settings from "./settings/SettingsPage"
+import ViewPost from "./view-post/ViewPost"
 
 export {
     AccountPage,
@@ -11,5 +12,6 @@ export {
     Home,
     ProfilePage,
     SearchResults,
-    Settings
+    Settings,
+    ViewPost
 }

@@ -1,64 +1,86 @@
-import React, {useEffect, useState} from "react"
+import React, { useEffect, useState } from "react"
 import ReactDOM from "react-dom/client"
-import {BrowserRouter, Route, Routes} from "react-router-dom"
-import { ThemeProvider } from "styled-components"
-import theme from "./tokens"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Layout from "./components/Layout"
 import * as Pages from "./pages"
-import {ProtectedRoute} from "./components/ProtectedRoute.tsx";
+import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
+import { AuthContext } from "./AuthContext.ts"
+import { ThemeContextProvider } from "./ThemeContext.tsx"
 
 function App() {
     const [email, setEmail] = useState("Jane Doe");
+    const [username, setUsername] = useState("");
     const [authToken, setAuthToken] = useState("");
 
+    const [isDarkMode, setIsDarkMode] = useState(false)
+    const toggleTheme = () => setIsDarkMode(!isDarkMode)
+
     console.log(`username: ${email}`);
+
     useEffect(() => {
         setEmail("me");
     }, []); // Empty dependency array: runs once on mount
 
     return (
-        <Routes>
-            <Route path="/" element={<Layout authToken={authToken}/>}>
-                <Route
-                    index
-                    element={<Pages.Home />}
-                />
-                <Route
-                    path="/login"
-                    element={<Pages.AccountPage setAuthToken={setAuthToken}/>}
-                />
-                <Route
-                    path="/create"
-                    element={
-                        <ProtectedRoute authToken={authToken}>
-                            <Pages.CreatePost />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/profile"
-                    element={
-                        <ProtectedRoute authToken={authToken}>
-                            <Pages.ProfilePage ownProfile = {true}/>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/settings"
-                    element={
-                        <ProtectedRoute authToken={authToken}>
-                            <Pages.Settings />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/search-results"
-                    element={<Pages.SearchResults />}
-                />
-            </Route>
-        </Routes>
+        <ThemeContextProvider isDarkMode={isDarkMode} toggleTheme={toggleTheme}>
+            <AuthContext.Provider value={{ username, setUsername, authToken, setAuthToken }}>
+                <Routes>
+                    <Route path="/" element={<Layout />}>
+                        <Route
+                            index
+                            element={<Pages.Home />}
+                        />
+                        <Route
+                            path="/login"
+                            element={<Pages.AccountPage />}
+                        />
+                        <Route
+                            path="/create"
+                            element={
+                                <ProtectedRoute>
+                                    <Pages.CreatePost />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/post/:postID"
+                            element={<Pages.ViewPost />}
+                        />
+                        <Route
+                            path="/profile"
+                            element={
+                                <ProtectedRoute>
+                                    <Pages.ProfilePage ownProfile={true}/>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/settings"
+                            element={
+                                <ProtectedRoute>
+                                    <Pages.Settings />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/search-results"
+                            element={<Pages.SearchResults />}
+                        />
+                    </Route>
+                </Routes>
+            </AuthContext.Provider>
+        </ThemeContextProvider>
     )
 }
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+    <React.StrictMode>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </React.StrictMode>
+)
+
 /*
 const router = createBrowserRouter([
     {
@@ -93,13 +115,3 @@ const router = createBrowserRouter([
         ]
     }
 ])*/
-
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <React.StrictMode>
-        <ThemeProvider theme={theme}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </ThemeProvider>
-    </React.StrictMode>
-)
