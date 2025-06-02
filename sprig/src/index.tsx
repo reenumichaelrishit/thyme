@@ -66,6 +66,10 @@ function App() {
                             path="/search-results"
                             element={<Pages.SearchResults />}
                         />
+                        <Route
+                            path="/search-results/:query"
+                            element={<Pages.SearchResults />}
+                        />
                     </Route>
                 </Routes>
             </AuthContext.Provider>

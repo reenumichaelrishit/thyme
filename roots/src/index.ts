@@ -2,8 +2,9 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
 import { createClient } from '@supabase/supabase-js'
-import {registerAuthRoutes, verifyAuthToken} from "./routes/auth";
+import { registerAuthRoutes, verifyAuthToken} from "./routes/auth";
 import { registerPostsRoutes } from "./routes/posts";
+import { registerSearchRoutes } from "./routes/search";
 
 const cors = require("cors");
 
@@ -32,6 +33,7 @@ app.use(cors({
 
 registerAuthRoutes(app, supabase);
 registerPostsRoutes(app, supabase);
+registerSearchRoutes(app, supabase);
 
 app.get("/hello", (req: Request, res: Response) => {
     res.send("Hello, World");

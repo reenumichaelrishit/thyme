@@ -27,7 +27,7 @@ const NavBar = styled.div `
 const RightNav = styled.div `
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-end;
   column-gap: 2vw;
 `;

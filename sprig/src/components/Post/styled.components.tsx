@@ -33,12 +33,12 @@ export const UserHeading = styled.div`
 
 export const BackButton = styled.button`
     aspect-ratio: 1 / 1;
-    width: 2.5vw;
     display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
-    left: 23.75vw;
+    left: 23.625vw;
+    padding: 0.5%;
     border: none;
     border-radius: 50%;
     z-index: 100;
