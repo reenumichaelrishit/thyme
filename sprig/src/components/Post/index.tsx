@@ -36,21 +36,13 @@ export interface PostProps {
         CommentLikes: Array<{
             commentid: string,
             userid: string
-        }>,
-        Users: {
-            username: string,
-            profilePhoto: string
-        }
+        }>
     }>,
     SavedPosts: Array<{
         postid: string,
         userid: string
     }>,
     Tags: Array<{ name: string }>,
-    Users: {
-        username: string,
-        profilePhoto: string
-    },
     refresh?: () => void
 }
 
@@ -98,7 +90,7 @@ export default Post
 
 // Following is the common content between FeedPost & DetailedPost
 
-export const PostHeader = forwardRef((props: { poster: string, profilePhoto: string }, ref: Ref<HTMLDivElement>) => {
+export const PostHeader = forwardRef((props: { poster : string }, ref: Ref<HTMLDivElement>) => {
     const [viewProfileOptionsMenu, setViewProfileOptionsMenu] = useState(false)
     const showProfileOptionsMenu = () => setViewProfileOptionsMenu(true)
     const hideProfileOptionsMenu = () => setTimeout(() => setViewProfileOptionsMenu(false), 250)
@@ -108,7 +100,7 @@ export const PostHeader = forwardRef((props: { poster: string, profilePhoto: str
     return (
         <UserHeading ref={ref}>
             <UserInfo>
-                <img src={props.profilePhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}/>
+                <img src={/*props.profileImage ?? */"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}/>
                 <span>@{props.poster}</span>
                 <FollowButton following={/*props.notFollowing*/false} />
             </UserInfo>
