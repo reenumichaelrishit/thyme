@@ -1,5 +1,5 @@
 import AccountPage from "./login/AccountPage"
-import CreatePost from "./create-post/CreatePost"
+import CreatePost from "./create-post"
 import Home from "./home/Home"
 import ProfilePage from "./profile/ProfilePage"
 import SearchResults from "./search-results"

@@ -20,6 +20,7 @@ export const Subheading = styled.h2`
 `
 
 export const Subsubheading = styled.h3`
+    margin-top: 2.5vh;
     font-weight: ${p => p.theme.weight.semibold};
     font-family: ${p => p.theme.fontFamily.heading};
     color: ${p => p.theme.color.standard.default};
@@ -150,8 +151,6 @@ export const CreatePostButton = styled.button`
 export const ChipsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    row-gap: 2.5vh;
-    margin-top: 2.5vh;
 `
 
 export const ChipSection = styled.div`
@@ -161,5 +160,37 @@ export const ChipSection = styled.div`
 
     & > span {
         padding: 0.5em 0;
+    }
+`
+
+export const AddTagsForm = styled.div`
+    display: flex;
+    align-items: center;
+    column-gap: 1vw;
+`
+
+export const AddTagButton = styled.button`
+    aspect-ratio: 1 / 1;
+    height: 6.25vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 50%;
+    margin-top: 3.5%;
+    cursor: pointer;
+    background-color: ${p => p.theme.background.standard.default};
+    transition: background-color ${p => p.theme.transition.default};
+
+    &:hover {
+        background-color: ${p => p.theme.background.standard.hover};
+    }
+
+    &:active {
+        background-color: ${p => p.theme.background.standard.active};
+    }
+
+    * {
+        color: ${p => p.theme.color.subheading.default};
     }
 `

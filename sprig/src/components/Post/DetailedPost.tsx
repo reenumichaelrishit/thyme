@@ -140,7 +140,7 @@ const DetailedPost = (props: SubPostProps) => {
     }
     
     return (
-        <PostContainer className = {props.images ? "imagePost" : ""}>
+        <PostContainer>
             <BackButton type="button" onClick={getBack}>
                 <ArrowLeft size={24} weight={"bold"} />
             </BackButton>
@@ -155,7 +155,7 @@ const DetailedPost = (props: SubPostProps) => {
                 />
             </NutritionRow>
             {props.images.length > 0 &&
-                <PostImage src={/*props.postImageLink*/""} />}
+                <PostImage src={props.images[0]} />}
             <ButtonBar
                 id={props.id}
                 liked={props.liked}

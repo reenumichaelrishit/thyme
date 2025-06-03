@@ -1,6 +1,8 @@
-import { Dispatch, SetStateAction } from "react"
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react"
 import Chips from "../../components/Chips"
-import { ChipsContainer, ChipSection, Subsubheading } from "./styled.components"
+import { AddTagButton, AddTagsForm, ChipsContainer, ChipSection, Subsubheading } from "./styled.components"
+import { Input } from "../../components/Input"
+import { ListPlus } from "@phosphor-icons/react"
 
 const ChipHandler = ({ tags, setTags } : {
     tags: Array<string>,
@@ -9,12 +11,24 @@ const ChipHandler = ({ tags, setTags } : {
     const pushToTags = (newValue: string) => setTags([...tags, newValue])
     const popFromTags = (oldValue: number) => setTags(tags.filter((_tag, index) => index !== oldValue))
 
+    const [newTag, setNewTag] = useState("")
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => setNewTag(e.target.value)
+    const handleSubmit = () => {
+        pushToTags(newTag)
+        setNewTag("")
+    }
+
     return (
         <ChipsContainer>
             {/* SEARCH FOR TAGS. */}
             <ChipSection>
-                <Subsubheading>Search for more tags!</Subsubheading>
-                <span>Search!</span>
+                <Subsubheading>Add more tags!</Subsubheading>
+                <AddTagsForm>
+                    <Input type={"text"} label={"tag name"} name={"tag"} value={newTag} onChange={handleChange} />
+                    <AddTagButton type="button" onClick={handleSubmit}>
+                        <ListPlus size={24} />
+                    </AddTagButton>
+                </AddTagsForm>
             </ChipSection>
             {/* SELECTED TAGS. */}
             <ChipSection>

@@ -42,7 +42,7 @@ const FeedPost = (props: SubPostProps) => {
                 </NutritionSummary>
             </PostContent>
             {props.images.length > 0 &&
-                            <PostImage src={/*props.postImageLink*/""} />}
+                <PostImage src={props.images[0]} />}
             <ButtonBar
                 id={props.id}
                 liked={props.liked}
