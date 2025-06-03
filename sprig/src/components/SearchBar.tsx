@@ -1,10 +1,9 @@
 import styled from "styled-components"
 import { ArrowRight, MagnifyingGlass } from "@phosphor-icons/react"
-// import Modal from "./Modal"
-// import { MouseEventHandler, useState } from "react"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { FormEvent } from "react"
 
-const Bar = styled.div`
+const Bar = styled.form`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -15,11 +14,8 @@ const Bar = styled.div`
 
     color: ${p => p.theme.color.heading.default};
     background-color: ${p => p.theme.background.accent.default};
-    transition: background-color ${p => p.theme.transition.default};
 
-    &:hover {
-        background-color: ${p => p.theme.background.accent.hover};
-    }
+    & > * { &:first-child, &:last-child { width: 1.5vw; }}
 `
 
 const SearchInput = styled.input`
@@ -41,28 +37,53 @@ const SearchInput = styled.input`
     }
 `
 
-const SearchButton = styled(ArrowRight)`
+const SearchButton = styled.button`
+    aspect-ratio: 1 / 1;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 50%;
     cursor: pointer;
     color: ${p => p.theme.color.heading.default};
+    background-color: ${p => p.theme.background.accent.default};
+    transition: background-color ${p => p.theme.transition.default};
+
+    &:hover {
+        background-color: ${p => p.theme.background.accent.hover};
+    }
+
+    &:active {
+        background-color: ${p => p.theme.background.accent.active};
+    }
 `
 
 const SearchBar = () => {
-    // const [searchRes, setSearchRes] = useState(false)
-    // const openSearchRes = () => setSearchRes(true)
-    // const closeSearchRes : MouseEventHandler = (e) => { if (e.target === e.currentTarget) setSearchRes(false) }
+    const navigate = useNavigate()
+
+    const submitSearch = (e: FormEvent) => {
+        e.preventDefault()
+
+        const form = e.target as HTMLFormElement
+        const formData = new FormData(form)
+
+        const query = formData.get("query")
+
+        navigate(`/search-results/${query}`)
+    }
 
     return (
         <>
-            {/* <Modal show={searchRes} turnOff={closeSearchRes} /> */}
-            <Bar>
+            <Bar onSubmit={submitSearch}>
                 <MagnifyingGlass size={16} weight={"bold"} />
                 <SearchInput
                     type="text"
+                    name="query"
                 />
-                <Link to="/search-results">
-                    {/* TODO: TO-DO: MAKE A SUBMIT BUTTON HERE */}
-                    <SearchButton size={16} weight={"bold"} />
-                </Link>
+                <SearchButton type="submit">
+                    <ArrowRight size={16} weight={"bold"} />
+                </SearchButton>
             </Bar>
         </>
     )
