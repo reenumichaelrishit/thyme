@@ -56,7 +56,7 @@ const ViewPost = () => {
         }
 
         fetchData()
-    }, [refresh])
+    }, [refreshValue])
 
     return (
         <ScrollContainer>
