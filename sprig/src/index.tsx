@@ -11,6 +11,7 @@ function App() {
     const [email, setEmail] = useState("Jane Doe");
     const [username, setUsername] = useState("");
     const [authToken, setAuthToken] = useState("");
+    const [profilePhoto, setProfilePhoto] = useState("");
 
     const [isDarkMode, setIsDarkMode] = useState(false)
     const toggleTheme = () => setIsDarkMode(!isDarkMode)
@@ -23,7 +24,7 @@ function App() {
 
     return (
         <ThemeContextProvider isDarkMode={isDarkMode} toggleTheme={toggleTheme}>
-            <AuthContext.Provider value={{ username, setUsername, authToken, setAuthToken }}>
+            <AuthContext.Provider value={{ username, setUsername, profilePhoto, setProfilePhoto, authToken, setAuthToken }}>
                 <Routes>
                     <Route path="/" element={<Layout />}>
                         <Route

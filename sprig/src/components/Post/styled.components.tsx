@@ -283,6 +283,7 @@ export const CommentContainer = styled.div`
     & > img {
         grid-area: profilepicture;
         align-self: start;
+        aspect-ratio: 1 / 1;
         height: 5vh;
         border-radius: 50%;
     }

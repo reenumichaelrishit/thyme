@@ -3,6 +3,8 @@ import { createContext, Dispatch, SetStateAction, useContext } from "react"
 interface AuthProps {
     username: string,
     setUsername: Dispatch<SetStateAction<string>>,
+    profilePhoto: string,
+    setProfilePhoto: Dispatch<SetStateAction<string>>,
     authToken: string,
     setAuthToken: Dispatch<SetStateAction<string>>
 }
@@ -10,6 +12,8 @@ interface AuthProps {
 export const AuthContext = createContext<AuthProps>({
     username: "",
     setUsername: () => {},
+    profilePhoto: "",
+    setProfilePhoto: () => {},
     authToken: "",
     setAuthToken: () => {}
 })

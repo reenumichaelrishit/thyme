@@ -54,7 +54,7 @@ function generateAuthToken(username: string): Promise<string> {
 
 export function registerAuthRoutes(app: express.Application, sbClient: SupabaseClient) {
     app.post("/auth/register", (req: Request, res: Response) => {
-        if(!(req.body.username && req.body.password)){
+        if(!(req.body.username && req.body.password && req.body.email && req.body.profilePhoto)){
             res.status(400).send({
                 error: "Bad request",
                 message: "Missing username or password"
@@ -69,7 +69,7 @@ export function registerAuthRoutes(app: express.Application, sbClient: SupabaseC
                         message: "Username already taken"
                     });
                 } else {
-                    credP.addToUsers(req.body.username).then(async user => {
+                    credP.addToUsers(req.body.username, req.body.email, req.body.profilePhoto).then(async user => {
                         if (!user) {
                             res.status(400).send({
                                 error: "Bad request",
@@ -98,7 +98,12 @@ export function registerAuthRoutes(app: express.Application, sbClient: SupabaseC
             credP.verifyPassword(username, password).then(async matches => {
                 if (matches) {
                     const token = await generateAuthToken(username)
-                    res.status(200).send({token: token})
+                    const profilePhoto = await credP.getProfilePhoto(username)
+
+                    res.status(200).send({
+                        token: token,
+                        profilePhoto: profilePhoto.error ? "" : profilePhoto.data
+                    })
                 } else res.status(401).send({
                     error: "Bad request",
                     message: "Incorrect username or password"

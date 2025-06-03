@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components';
-import { UserCircle, NotePencil, Sun, Moon, SignIn } from "@phosphor-icons/react";
+import { NotePencil, Sun, Moon, SignIn } from "@phosphor-icons/react";
 import SearchBar from './SearchBar';
 import { useState } from 'react';
 import Menu from './Menu';
@@ -27,9 +27,13 @@ const NavBar = styled.div `
 const RightNav = styled.div `
   display: flex;
   flex-direction: row;
-  align-items: stretch;
+  align-items: center;
   justify-content: flex-end;
   column-gap: 2vw;
+
+  * {
+    max-height: 7.5vh;
+  }
 `;
 
 const HomeButton = styled(Link) `
@@ -67,20 +71,37 @@ const AddPostButton = styled.button`
   }
 `;
 
-const ProfileButton = styled(Link)`
+const ProfileButton = styled.div`
+    max-height: 9vh;
     display: flex;
-    font-family: ${p => p.theme.fontFamily.content};
-    
-    color: ${p => p.theme.color.accent.default};
-    &:active {color: ${p => p.theme.color.accent.hover};};
-    
-    border-radius: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 2.5px;
+    border: 2.5px solid ${p => p.theme.color.accent.default};
+    margin: 0 auto;
+    cursor: pointer;
+    background-color: ${p => p.theme.background.navbar.default};
+    transition: all ${p => p.theme.transition.default};
+
+    &, img {
+        border-radius: 50%;
+    }
+
+    img {
+        aspect-ratio: 1 / 1;
+        height: 100%;
+    }
+
+    &:hover {
+        border-color: ${p => p.theme.color.accent.hover};
+        background-color: ${p => p.theme.background.navbar.hover};
+    }
 `;
 
 const Nav = () => {
     const navigate = useNavigate()
     const { isDarkMode, toggleTheme } = useTheme()
-    const { authToken } = useAuth()
+    const { authToken, profilePhoto } = useAuth()
 
     const [viewProfileMenu, setViewProfileMenu] = useState(false)
     const openProfileMenu = () => setViewProfileMenu(true)
@@ -99,8 +120,8 @@ const Nav = () => {
                     </AddPostButton> :
                     <></>}
                 {authToken ?
-                    <ProfileButton to="#" onMouseEnter={openProfileMenu} onMouseLeave={closeProfileMenu}>
-                        <UserCircle size={64} />
+                    <ProfileButton onMouseEnter={openProfileMenu} onMouseLeave={closeProfileMenu}>
+                        <img src={profilePhoto} alt="profile photo" />
                     </ProfileButton> :
                     <AddPostButton type="button" onClick={() => navigate("/login")}>
                         <SignIn size={16} weight={"bold"} />

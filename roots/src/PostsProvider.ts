@@ -9,6 +9,7 @@ export class PostsProvider {
     private readonly savesTableName: string;
     private readonly tagsTableName: string;
     // private readonly ingredientTagsTableName: string;
+    private readonly usersTableName: string;
 
     constructor(sbClient: SupabaseClient) {
         if (
@@ -18,7 +19,8 @@ export class PostsProvider {
             !process.env.CMNT_LIKES_COLLECTION_NAME ||
             !process.env.SAVES_COLLECTION_NAME ||
             !process.env.TAGS_COLLECTION_NAME ||
-            !process.env.INGR_TAGS_COLLECTION_NAME
+            !process.env.INGR_TAGS_COLLECTION_NAME ||
+            !process.env.USERS_COLLECTION_NAME
         ) {
             throw new Error("Missing COLLECTION_NAME from env file");
         }
@@ -30,6 +32,7 @@ export class PostsProvider {
         this.savesTableName = process.env.SAVES_COLLECTION_NAME;
         this.tagsTableName = process.env.TAGS_COLLECTION_NAME;
         // this.ingredientTagsTableName = process.env.INGR_TAGS_COLLECTION_NAME;
+        this.usersTableName = process.env.USERS_COLLECTION_NAME;
         this.sb = sbClient;
     }
 
@@ -41,10 +44,12 @@ export class PostsProvider {
                     ${this.likesTableName}(*),
                     ${this.commentsTableName}(
                         *,
-                        ${this.commentLikesTableName}(*)
+                        ${this.commentLikesTableName}(*),
+                        ${this.usersTableName}!Comment_commenter_fkey(*)
                     ),
                     ${this.savesTableName}(*),
-                    ${this.tagsTableName}(name)`)
+                    ${this.tagsTableName}(name),
+                    ${this.usersTableName}!Post_poster_fkey(*)`)
                 .order("created_at", { ascending: false })
                 .limit(10);
         
@@ -71,10 +76,12 @@ export class PostsProvider {
                     ${this.likesTableName}(*),
                     ${this.commentsTableName}(
                         *,
-                        ${this.commentLikesTableName}(*)
+                        ${this.commentLikesTableName}(*),
+                        ${this.usersTableName}!Comment_commenter_fkey(*)
                     ),
                     ${this.savesTableName}(*),
-                    ${this.tagsTableName}(name)`)
+                    ${this.tagsTableName}(name),
+                    ${this.usersTableName}!Post_poster_fkey(*)`)
                 .eq("id", id);
         
         if (error) {

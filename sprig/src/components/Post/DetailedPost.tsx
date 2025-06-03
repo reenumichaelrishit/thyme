@@ -33,6 +33,9 @@ const Comment = (comment: {
         commentid: string,
         userid: string
     }>,
+    Users: {
+        profilePhoto: string
+    }
     refresh?: () => void
 }) => {
     const { authToken, username } = useAuth()
@@ -75,7 +78,7 @@ const Comment = (comment: {
 
     return (
         <CommentContainer>
-            <img src={/*props.profileImage ?? */"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}/>
+            <img src={comment.Users.profilePhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}/>
             <Commenter>@{comment.commenter}</Commenter>
             <Interactions>
                 <LikeComment onClick={!authToken ? () => {} : toggleLike} $selected={liked}>
@@ -144,7 +147,7 @@ const DetailedPost = (props: SubPostProps) => {
             <BackButton type="button" onClick={getBack}>
                 <ArrowLeft size={24} weight={"bold"} />
             </BackButton>
-            <PostHeader poster={props.poster} />
+            <PostHeader poster={props.poster} profilePhoto={props.Users.profilePhoto} />
             <Title title={props.title} description={props.description} tags={props.Tags} />
             <NutritionRow>
                 <NutritionContent

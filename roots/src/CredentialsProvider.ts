@@ -34,14 +34,19 @@ export class CredentialsProvider {
         return status === 201;
     }
 
-    async addToUsers(username: string) {
+    async addToUsers(username: string, email: string, profilePhoto: string) {
         const { data, error } = await this.sb.from(this.usersTableName).select("username").eq("username", username).maybeSingle()
         if (data) {
             return false;
         }
 
         const { status } = await this.sb.from(this.usersTableName).insert(
-            { username: username },
+            {
+                username: username,
+                email: email,
+                bio: "",
+                profilePhoto: profilePhoto
+            },
         );
 
         return status === 201;
@@ -55,5 +60,15 @@ export class CredentialsProvider {
         }
 
         return bcrypt.compare(plaintextPassword, data.password)
+    }
+
+    async getProfilePhoto(username: string) {
+        const { data, error } = await this.sb.from(this.usersTableName).select("profilePhoto").eq("username", username).single()
+
+        if (error || !data) {
+            return { error: "error getting profile photo" }
+        }
+
+        return { data: data.profilePhoto }
     }
 }
