@@ -8,7 +8,7 @@ import { useAuth } from "../../AuthContext.ts";
 
 const CreateAccount = ({ newAccount, setNewAccount } : LogInSectionProps) => {
     const navigate = useNavigate()
-    const { setUsername, setAuthToken } = useAuth()
+    const { setUsername, setProfilePhoto, setAuthToken } = useAuth()
 
     async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -16,8 +16,10 @@ const CreateAccount = ({ newAccount, setNewAccount } : LogInSectionProps) => {
         const formData = new FormData(e.currentTarget);
         const username = formData.get("username") as string;
         const password = formData.get("password") as string;
+        const email = formData.get("email") as string;
+        const profilePhoto = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
 
-        const result = await sendPostRequest("/auth/register", {username, password});
+        const result = await sendPostRequest("/auth/register", { username, password, email, profilePhoto });
 
         if (result.error) {
             if (result.status === 409) {
@@ -33,6 +35,7 @@ const CreateAccount = ({ newAccount, setNewAccount } : LogInSectionProps) => {
         if (result.token) {
             setAuthToken(result.token);
             setUsername(username);
+            setProfilePhoto(profilePhoto);
             navigate("/");
         } else {
             console.error("Token not found in result:", result);
@@ -47,9 +50,9 @@ const CreateAccount = ({ newAccount, setNewAccount } : LogInSectionProps) => {
             <FormStyled $newAccount={newAccount} onSubmit={handleRegister}>
                 <Heading>make an account!</Heading>
                 <FormSection $newAccount={newAccount}>
-                    <Input type="text" label="email address" name="email address"/>
-                    <Input type="text" label="username" name="username"/>
-                    <Input type="password" label="password" name="password"/>
+                    <Input type="text" label="email address" name="email" required />
+                    <Input type="text" label="username" name="username" required />
+                    <Input type="password" label="password" name="password" required />
                 </FormSection>
                 <FormSection $newAccount={newAccount}>
                     <SubmitButton type="submit">create account</SubmitButton>

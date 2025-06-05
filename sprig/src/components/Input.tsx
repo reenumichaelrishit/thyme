@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, TextareaHTMLAttributes } from "react"
+import { ChangeEvent, InputHTMLAttributes, TextareaHTMLAttributes } from "react"
 import styled, { css } from "styled-components"
 
 const InputStyles = css`
@@ -90,6 +90,9 @@ const FileInputStyled = styled.input`
 interface LabelProp { label? : string }
 interface InputProps extends LabelProp, InputHTMLAttributes<HTMLInputElement> {}
 interface TextareaProps extends LabelProp, TextareaHTMLAttributes<HTMLTextAreaElement> {}
+interface FileInputProps extends InputProps {
+    maxFileSize?: number
+}
 
 export const Input = (props: InputProps) => {
     const { label, ...p } = props
@@ -119,12 +122,34 @@ export const Textarea = (props: TextareaProps) => {
     )
 }
 
-export const FileInput = (props: InputProps) => {
-    const { label, type, ...p } = props
+export const FileInput = (props: FileInputProps) => {
+    const { label, type, maxFileSize, onChange, ...p } = props
+
+    const validateFileSize = (e: ChangeEvent<HTMLInputElement>) => {
+        if (
+            e.target.files?.length &&
+            e.target.files?.length > 0 &&
+            maxFileSize
+        ) {
+            const fileSize = e.target.files?.item(0)?.size
+
+            // If fileSize exceeds limit, CLEAR IT!
+            if (fileSize && fileSize > maxFileSize) {
+                e.target.value = ""
+
+                alert(`please choose a file smaller than ${Math.round(maxFileSize / (1024 * 1024))} MB!`)
+            }
+        }
+    }
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        onChange && onChange(e)
+        validateFileSize(e)
+    }
 
     return (
         <Container>
-            <FileInputStyled type={"file"} {...p} />
+            <FileInputStyled type={"file"} onChange={handleChange} {...p} />
         </Container>
     )
 }

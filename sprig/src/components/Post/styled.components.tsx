@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components"
 
 export const PostContainer = styled.article`
-    // max-height: 100vh;
     width: 50vw;
     
     display: flex;
@@ -14,10 +13,6 @@ export const PostContainer = styled.article`
     color: ${p => p.theme.color.standard.default};
     background-color: ${p => p.theme.background.standard.default};
     font-family: ${p => p.theme.fontFamily.content};
-    
-    &.imagePost {
-        // max-height: 100vh;
-    }
 
     &.feedPost { cursor: pointer; }
 `
@@ -133,7 +128,7 @@ export const NutritionSummary = styled.div`
 export const NutritionRow = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 1vh;
+    margin: 1vh 0;
 
     * {
         width: 25%;
@@ -157,6 +152,7 @@ export const PostImage = styled.img`
     width: 100%;
     object-fit: cover;
     max-height: 60vh;
+    border-radius: 15px;
 `
 
 export const PostSectionHeading = styled.h2`
@@ -287,6 +283,7 @@ export const CommentContainer = styled.div`
     & > img {
         grid-area: profilepicture;
         align-self: start;
+        aspect-ratio: 1 / 1;
         height: 5vh;
         border-radius: 50%;
     }

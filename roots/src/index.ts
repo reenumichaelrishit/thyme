@@ -23,7 +23,7 @@ const supabase = createClient(sbUrl, SB_SERVICE_ROLE_KEY ?? "", {
     }});
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 app.use(express.static(staticDir));
 app.use(cors({
     origin: process.env.FRONTEND_SERVER,

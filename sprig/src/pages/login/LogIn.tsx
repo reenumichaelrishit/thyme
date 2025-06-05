@@ -9,7 +9,7 @@ import { useAuth } from "../../AuthContext.ts";
 
 const LogIn = ({ newAccount, setNewAccount } : LogInSectionProps) => {
     const navigate = useNavigate()
-    const { setUsername, setAuthToken } = useAuth()
+    const { setUsername, setProfilePhoto, setAuthToken } = useAuth()
 
     async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -31,6 +31,7 @@ const LogIn = ({ newAccount, setNewAccount } : LogInSectionProps) => {
 
         if (result.token) {
             setAuthToken(result.token);
+            setProfilePhoto(result.profilePhoto);
             setUsername(username);
             navigate("/");
         } else {

@@ -33,7 +33,11 @@ const ViewPost = () => {
         Likes: [],
         Comments: [],
         SavedPosts: [],
-        Tags: []
+        Tags: [],
+        Users: {
+            username: "",
+            profilePhoto: ""
+        }
     })
 
     const [refreshValue, setRefreshValue] = useState(false)

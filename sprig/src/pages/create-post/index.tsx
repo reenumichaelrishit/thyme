@@ -40,17 +40,61 @@ const CreatePost = () => {
         })
     )
 
+    const convertImageToDataURI = async (image: File) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+
+            reader.onload = () => {
+                // Converting to WEBP
+                const img = new Image()
+
+                img.onload = () => {
+                    const canvas = document.createElement("canvas")
+                    const ctx = canvas.getContext("2d")
+
+                    canvas.width = img.width * 0.75
+                    canvas.height = img.height * 0.75
+
+                    ctx?.drawImage(img, 0, 0, img.width, img.height)
+
+                    const WEBPURI = canvas.toDataURL("image/webp", 0.5)
+
+                    resolve(WEBPURI)
+                }
+
+                img.onerror = () => reject
+
+                img.src = reader.result as string
+            }
+
+            reader.onerror = () => reject
+
+            reader.readAsDataURL(image)
+        })
+    }
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
 
         const form = e.target as HTMLFormElement
         const formData = new FormData(form)
+
+        const imageUpload = formData.get("ImageUpload")
+        const imageLink = formData.get("ImageLink")
+
+        const images =
+            imageLink ?
+                [imageLink] :
+            imageUpload ?
+                [await convertImageToDataURI(imageUpload as File)] :
+            // There is no image.
+                []
     
         const post = {
             poster: username,
             title: formData.get("Title"),
             description: formData.get("Description") == "" ? null : formData.get("Description"),
-            images: [], // formData.get("PrimaryImage"), formData.get("SecondaryImage")
+            images: images,
             calories: formData.get("Calories") == "" ? null : formData.get("Calories"),
             protein: formData.get("Protein") == "" ? null : formData.get("Protein"),
             carbs: formData.get("Carbs") == "" ? null : formData.get("Carbs"),
@@ -63,7 +107,7 @@ const CreatePost = () => {
         const res = await sendPostRequest("/api/posts/add", post)
 
         if (res.error) {
-            console.error("post not found!")
+            console.error("post was unable to be created!")
         } else {
             console.log("post created!")
 
@@ -89,14 +133,15 @@ const CreatePost = () => {
                         <Textarea name={"Description"} label={"Description"} maxLength={100} />
                     </FormSection>
                     <FormSection>
-                        {/* PRIMARY AND SECONDARY IMAGES */}
+                        {/* COVER IMAGE */}
                         <Subsection>
-                            <Subheading>Primary Image</Subheading>
-                            <FileInput name={"PrimaryImage"} accept={"image/*"} />
-                        </Subsection>
-                        <Subsection>
-                            <Subsubheading>Secondary Images (optional)</Subsubheading>
-                            <FileInput name={"SecondaryImage"} accept={"image/*"} />
+                            <Subheading>Cover Image</Subheading>
+                            {/* FILE UPLOAD OPTION */}
+                            <Subsubheading>Upload an image!</Subsubheading>
+                            <FileInput name={"ImageUpload"} accept={"image/*"} maxFileSize={1024 * 1024 * 0.5} />
+                            {/* FILE LINK OPTION */}
+                            <Subsubheading>Alternatively, post a link!</Subsubheading>
+                            <Input type={"url"} name={"ImageLink"} label={"Link"} pattern={"(http|https):\/\/.*\.(jpg|jpeg|png|gif|webp|svg)"} />
                         </Subsection>
                     </FormSection>
                     <FormSection>

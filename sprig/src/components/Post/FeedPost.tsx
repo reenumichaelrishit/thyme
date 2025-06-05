@@ -29,7 +29,7 @@ const FeedPost = (props: SubPostProps) => {
 
     return (
         <PostContainer className={`${props.images ? "imagePost" : ""} feedPost`} onClick={goToPost}>
-            <PostHeader poster={props.poster} ref={PostHeaderRef} />
+            <PostHeader poster={props.poster} profilePhoto={props.Users.profilePhoto} ref={PostHeaderRef} />
             <PostContent>
                 <Title title={props.title} description={props.description} tags={props.Tags} />
                 <NutritionSummary>
@@ -42,7 +42,7 @@ const FeedPost = (props: SubPostProps) => {
                 </NutritionSummary>
             </PostContent>
             {props.images.length > 0 &&
-                            <PostImage src={/*props.postImageLink*/""} />}
+                <PostImage src={props.images[0]} />}
             <ButtonBar
                 id={props.id}
                 liked={props.liked}
