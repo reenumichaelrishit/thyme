@@ -148,7 +148,13 @@ const ProfilePage = (props: {
 
         return (
         <>
-        <Modal show={searchRes} turnOff={closeSearchRes} />
+        <Modal heading={"Friends"} show={searchRes} turnOff={closeSearchRes} >
+            {userData.friends.map(post =>
+                <Link to={`/post/${post.id}`}>
+
+                </Link>
+            )}
+        </Modal>
         <ScrollContainer>
             <Grids $ownProfile={props.ownProfile? true: false} >
             <img src={"https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"}

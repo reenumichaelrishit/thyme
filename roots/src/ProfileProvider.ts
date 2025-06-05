@@ -64,6 +64,15 @@ export class ProfileProvider {
         return data;
     }
 
+    async getFollowers(username: string) {
+        const { data, error } = await this.sb.from(this.followerPairsTableName)
+            .select()
+            .eq("follower", username)
+        if (error) throw new Error("Can't find user's posts");
+
+        return data;
+    }
+
     async changeUsername(oldusername: string, newusername: string) {
         const { data, error } = await this.sb.from(this.profileTableName)
             .select()
