@@ -149,11 +149,11 @@ const ProfilePage = (props: {
         return (
         <>
         <Modal heading={"Friends"} show={searchRes} turnOff={closeSearchRes} >
-            {userData.friends.map(post =>
-                <Link to={`/post/${post.id}`}>
+            {/*{userData.friends.map(post =>*/}
+            {/*    <Link to={`/post/${post.id}`}>*/}
 
-                </Link>
-            )}
+            {/*    </Link>*/}
+            {/*)}*/}
         </Modal>
         <ScrollContainer>
             <Grids $ownProfile={props.ownProfile? true: false} >
