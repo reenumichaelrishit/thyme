@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {Link} from "react-router-dom";
 
 const PostDiv = styled.div `
     display: grid;
@@ -43,7 +44,9 @@ const PhotoWindow = (props: {
             <h3>{props.title}</h3>
         </Title>
         <User>
+            <Link to={`/profile/${props.posterUsername ?? ""}`}>
             <h4>{props.posterUsername ?? "Unknown"}</h4>
+            </Link>
         </User>
    </PostDiv>
 )

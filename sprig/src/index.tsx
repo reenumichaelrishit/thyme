@@ -56,6 +56,12 @@ function App() {
                             }
                         />
                         <Route
+                            path="/profile/:username"
+                            element={
+                                <Pages.ProfilePage ownProfile={false} />
+                            }
+                        />
+                        <Route
                             path="/settings"
                             element={
                                 <ProtectedRoute>

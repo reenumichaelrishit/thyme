@@ -1,23 +1,22 @@
 import styled from "styled-components"
 import PhotoWindow from "../../components/PhotoWindow";
-import { MouseEventHandler, ReactNode, useRef, useState } from "react"
+import { MouseEventHandler, ReactNode, useEffect, useRef, useState} from "react"
 import Scrollbars from "react-custom-scrollbars-2"
 import { CaretCircleLeft, CaretCircleRight } from "@phosphor-icons/react"
 import ScrollContainer from "../../components/ScrollContainer";
 import Modal from "../../components/Modal";
-const Grids = styled.div `
-    min-height: 90vh;
+// import {useAuth} from "../../AuthContext.ts";
+import {sendGetRequest} from "../../fetches/sendGetRequest.tsx";
+import {Link, useParams} from "react-router-dom";
+import {useAuth} from "../../AuthContext.ts";
+const Grids = styled.div<{ $ownProfile?: boolean }>
+`
+    min-height: ${props => props.$ownProfile ? "90vh" : "50vh"};
     display: grid;
     margin: 5vh 5vw;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    // & .link {
-    //     color:${p => p.theme.color.accent.default};
-    //     &:visited {
-    //         color:${p => p.theme.color.accent.default};
-    //     }
-    // }
-`
+    grid-template-rows: ${props => props.$ownProfile ? "1fr 1fr 1fr": "1fr 1fr"};
+`;
 
 const Description = styled.div `
     grid-column: 2;
@@ -66,10 +65,15 @@ const UserPosts = styled.div `
     grid-row: 2;
     grid-column-gap: 10px
 `
+const LikedPosts = styled.div `
+    grid-column: 1/4;
+    grid-row: 4;
+    grid-column-gap: 10px
+`
 
 const FriendsButton = styled.div `
     grid-column: 3;
-    grid-row 1;
+    grid-row: 1;
     align-self: center;
     justify-self: center;
 
@@ -77,17 +81,83 @@ const FriendsButton = styled.div `
 
 const ProfilePage = (props: {
     ownProfile: boolean;
-    profilePic?: string;
     }) =>  {
         const [searchRes, setSearchRes] = useState(false)
+        const [userData, setUserData] = useState<
+            {
+                profilePhoto:string,
+                bio:string,
+                SavedPosts:Array<{
+                    Posts:{
+                        "title": string
+                        "id":string,
+                        "poster":string
+                    }
+                }>,
+                Likes:Array<{
+                    Posts: {
+                        "title": string
+                        "id":string,
+                        "poster":string
+                    }
+                }>,
+                posts:Array<{
+                    "title": string,
+                    "id":string,
+                    "poster":string
+                }>
+            }
+        >({
+            profilePhoto:"",
+            bio:"",
+            SavedPosts:[],
+            Likes:[],
+            posts:[]
+        })
         const openSearchRes = () => setSearchRes(true)
         const closeSearchRes : MouseEventHandler = (e) => { if (e.target === e.currentTarget) setSearchRes(false) }
+
+        const params = useParams() as { username: string };
+        const authUsername = useAuth();
+        const username = props.ownProfile ? authUsername.username : params.username;
+        useEffect(()=>{
+                // sendGetRequest(`api/profile/${username}`).then((res)=>{
+                //     if(res.error) {
+                //         console.error("Cannot fetch user data useEffect.",username, res)
+                //     }
+                //     else {
+                //         setUserData(res)
+                //     }
+                // })
+            const fetchData = async () => {
+                const res = await sendGetRequest(`/api/profile/${username}`)
+
+                if(res.error) {
+                    console.error("Cannot fetch user data useEffect.",username, res)
+                }
+                else {
+                    console.log("USEEFFECT WORKED LETS FUCKING GO")
+                    setUserData(res)
+                }
+            }
+
+            fetchData()
+            }, []);
+
+
+
         return (
         <>
-        <Modal show={searchRes} turnOff={closeSearchRes} />
+        <Modal heading={"Friends"} show={searchRes} turnOff={closeSearchRes} >
+            {/*{userData.friends.map(post =>*/}
+            {/*    <Link to={`/post/${post.id}`}>*/}
+
+            {/*    </Link>*/}
+            {/*)}*/}
+        </Modal>
         <ScrollContainer>
-        <Grids>
-            <img src={props.profilePic ?? "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"}
+            <Grids $ownProfile={props.ownProfile? true: false} >
+            <img src={"https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"}
                  style= {{
                         gridColumn: "1",
                         gridRow: "1 / 2",
@@ -96,10 +166,10 @@ const ProfilePage = (props: {
             
             <Description>
                 <h1>
-                    Username
+                    {username}
                 </h1>
                 <h3>
-                    This is a description that is much longer than I have seen previously let's see how it
+                    {userData.bio}
                 </h3>
                 {props.ownProfile ?
                     <button 
@@ -120,17 +190,14 @@ const ProfilePage = (props: {
             </FriendsButton>
             <UserPosts>
                 {props.ownProfile ? <h2 style={{alignSelf: "center", justifySelf: "center"}}>Your Posts</h2> :
-                                <h2 style={{alignSelf: "center", justifySelf: "center"}}>User's Posts</h2>}
+                                <h2 style={{alignSelf: "center", justifySelf: "center"}}>{username}'s Posts</h2>}
                 <HorizontalScrollContainer height={"40vh"}
                                         scrollOffset={200}>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    {userData.posts.map(post =>
+                        <Link to={`/post/${post.id}`}>
+                        <TestDiv><PhotoWindow title = {post.title} posterUsername={post.poster} /></TestDiv>
+                        </Link>
+                    )}
                 </HorizontalScrollContainer>
             </UserPosts>
             {props.ownProfile ?
@@ -138,17 +205,31 @@ const ProfilePage = (props: {
                 <h2 style={{alignSelf: "center", justifySelf: "center"}}>Saved Posts</h2>
                 <HorizontalScrollContainer height={"40vh"}
                                         scrollOffset={200}>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
-                    <TestDiv><PhotoWindow title = {"Some Recipe"} /></TestDiv>
+                    {userData.SavedPosts.map((entry) =>
+                            <TestDiv>
+                                <Link to={`/post/${entry.Posts.id}`}>
+                                <PhotoWindow title={entry.Posts.title} posterUsername={entry.Posts.poster} />
+                                </Link>
+                            </TestDiv>
+                    )}
                 </HorizontalScrollContainer>
-            </SavedPosts> : <div /> }
-        </Grids>
+            </SavedPosts> : <div />}
+            {props.ownProfile ?
+                <LikedPosts>
+                    <h2 style={{alignSelf: "center", justifySelf: "center"}}>Liked Posts</h2>
+                    <HorizontalScrollContainer height={"40vh"}
+                                               scrollOffset={200}>
+                        {userData.Likes.map((entry) =>
+
+                            <TestDiv>
+                                <Link to={`/post/${entry.Posts.id}`}>
+                                <PhotoWindow title={entry.Posts.title} posterUsername={entry.Posts.poster}/>
+                                </Link>
+                            </TestDiv>
+                        )}
+                    </HorizontalScrollContainer>
+                </LikedPosts> : <div />}
+            </Grids>
         </ScrollContainer>
         </>
     ) }

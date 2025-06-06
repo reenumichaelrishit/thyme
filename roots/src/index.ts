@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 import { registerAuthRoutes, verifyAuthToken} from "./routes/auth";
 import { registerPostsRoutes } from "./routes/posts";
 import { registerSearchRoutes } from "./routes/search";
+import {registerProfileRoutes} from "./routes/profile";
 
 const cors = require("cors");
 
@@ -34,6 +35,7 @@ app.use(cors({
 registerAuthRoutes(app, supabase);
 registerPostsRoutes(app, supabase);
 registerSearchRoutes(app, supabase);
+registerProfileRoutes(app, supabase);
 
 app.get("/hello", (req: Request, res: Response) => {
     res.send("Hello, World");

@@ -1,7 +1,6 @@
 import styled from "styled-components"
 import { X } from "@phosphor-icons/react"
-import { MouseEventHandler, useState } from "react"
-import Tabs from "./Tabs"
+import {MouseEventHandler, ReactNode} from "react"
 
 const ModalContainer = styled.div`
     width: 100vw;
@@ -53,17 +52,19 @@ const Heading = styled.h1`
 
 interface ModalProps {
     show: boolean,              // Controls whether or not to show the Modal
-    turnOff: MouseEventHandler  // Function for closing the Modal
+    turnOff: MouseEventHandler,  // Function for closing the Modal
+    heading: string,
+    children?: ReactNode
 }
 
 const Modal = (p: ModalProps) => {
-    const [sm, setSm] = useState<number>(1)
+    // const [sm, setSm] = useState<number>(1)
     return p.show ? (
         <ModalContainer onClick={p.turnOff}>
             <ModalWindow>
                 <CloseButton size={32} onClick={p.turnOff} />
-                <Heading>showing search results for "query"</Heading>
-                <Tabs items={["Recipes", "Accounts"]} selected={sm} setSelected={setSm} alignSelf="center"/>
+                <Heading>{p.heading}</Heading>
+                {p.children}
             </ModalWindow>
         </ModalContainer>
     ) : <></>
