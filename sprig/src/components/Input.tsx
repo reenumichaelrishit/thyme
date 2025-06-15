@@ -147,9 +147,5 @@ export const FileInput = (props: FileInputProps) => {
         validateFileSize(e)
     }
 
-    return (
-        <Container>
-            <FileInputStyled type={"file"} onChange={handleChange} {...p} />
-        </Container>
-    )
+    return <FileInputStyled type={"file"} onChange={handleChange} {...p} />
 }

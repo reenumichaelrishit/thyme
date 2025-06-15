@@ -1,113 +1,18 @@
-import styled, { css } from "styled-components"
 import Tabs from "../../components/Tabs"
 import { useEffect, useState } from "react"
 import ScrollContainer from "../../components/ScrollContainer"
 import { useNavigate, useParams } from "react-router-dom"
 import { sendGetRequest } from "../../fetches/sendGetRequest"
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 5vh 4vw;
-    row-gap: 2.5vh;
-`
-
-const Heading = styled.h1`
-    font-family: ${p => p.theme.fontFamily.heading};
-    color: ${p => p.theme.color.heading.default};
-`
-
-const ResultsContainer = styled.div<{ $viewMode: number }>`
-    height: 100%;
-    display: grid;
-    grid-template-columns: ${p => `repeat(${p.$viewMode === 0 ? "4, 1fr" : "6, 10vw"})`};
-    grid-template-rows: repeat(auto-fill, 25vh);
-    justify-content: space-between;
-    column-gap: 2vw;
-    row-gap: 2.5vh;
-    padding: 2.5vh 5vw;
-`
-
-const AlertHeading = styled.h1`
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-style: italic;
-    font-family: ${p => p.theme.fontFamily.heading};
-    color: ${p => p.theme.color.subheading.default};
-`
-
-const CardStyles = css`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    row-gap: 0.5vh;
-    text-align: center;
-    cursor: pointer;
-
-    h2, h3 {
-        font-family: ${p => p.theme.fontFamily.heading};
-        text-wrap: pretty;
-    }
-
-    h2 {
-        font-size: 1.5em;
-        font-weight: ${p => p.theme.weight.bold};
-        color: ${p => p.theme.color.heading.default};
-        transition: color ${p => p.theme.transition.default};
-
-        &:hover { color: ${p => p.theme.color.heading.hover}; }
-    }
-
-    h3 {
-        font-size: 1.125em;
-        font-weight: ${p => p.theme.weight.medium};
-        color: ${p => p.theme.color.subheading.default};
-        transition: color ${p => p.theme.transition.default};
-
-        &:hover { color: ${p => p.theme.color.subheading.hover}; }
-    }
-`
-
-const RecipeCardStyled = styled.div`
-    ${CardStyles};
-    width: 100%;
-
-    img {
-        aspect-ratio: 3 / 2;
-        max-width: 100%;
-    }
-`
-
-const UserCardStyled = styled.div`
-    ${CardStyles};
-    width: 10vw;
-    border-radius: 5px;
-    background-color: ${p => p.theme.background.standard.default};
-    transition: background-color ${p => p.theme.transition.default};
-
-    &:hover {
-        background-color: ${p => p.theme.background.standard.hover};
-    }
-
-    &:active {
-        background-color: ${p => p.theme.background.standard.active};
-    }
-
-    img {
-        aspect-ratio: 1 / 1;
-        width: 7.5vw;
-        border-radius: 50%;
-    }
-`
+import { RecipeCardStyled, UserCardStyled, Container, Heading, ResultsContainer, AlertHeading, SortFilterContainer, ResultsContainerWrapper, SortFilterHeading, RadioButtonContainer, RadioButton } from "./styled.components"
 
 interface RecipeResult {
     id: string,
     title: string,
-    poster: string
-    images: Array<string>
+    poster: string,
+    images: Array<string>,
+    created_at: string,
+    Likes: [{ count: number }],
+    SavedPosts: [{ count: number }]
 }
 
 interface UserResult {
@@ -148,14 +53,16 @@ const UserCard = (props: UserResult) => {
     )
 }
 
-type SearchResult = Array<RecipeResult> | Array<UserResult>
+const sortOptions = ["newest first", "oldest first", "most liked", "most saved"]
 
+type SearchResult = Array<RecipeResult> | Array<UserResult>
 const SearchResults = () => {
     const { query } = useParams()
 
     const [searchMode, setSearchMode] = useState(0)
     const [searchResults, setSearchResults] = useState<SearchResult>([])
     const [loading, setLoading] = useState(true)
+    const [sortMode, setSortMode] = useState(sortOptions[0])
 
     const lookupSearchMode = () => {
         switch (searchMode) {
@@ -169,6 +76,22 @@ const SearchResults = () => {
         }
     }
 
+    const lookupSortMode = () => {
+        switch (sortMode) {
+            case sortOptions[0]:
+                return (a: RecipeResult, b: RecipeResult) => Date.parse(b.created_at) - Date.parse(a.created_at)
+            case sortOptions[1]:
+                return (a: RecipeResult, b: RecipeResult) => Date.parse(a.created_at) - Date.parse(b.created_at)
+            case sortOptions[2]:
+                return (a: RecipeResult, b: RecipeResult) => b.Likes[0].count - a.Likes[0].count
+            case sortOptions[3]:
+                return (a: RecipeResult, b: RecipeResult) => b.SavedPosts[0].count - a.SavedPosts[0].count
+            default:
+                setSortMode(sortOptions[0])
+                console.error("error with sort mode... returning to [newest first]")
+        }
+    }
+
     useEffect(() => {
         setLoading(true);
 
@@ -176,16 +99,19 @@ const SearchResults = () => {
             const data = await sendGetRequest(`/api/search/${lookupSearchMode()}/${query}`)
 
             if (data.error) {
-                console.error("could not fetch post data!", data.error)
+                console.error("could not fetch search results!", data.error)
             } else {
-                console.log(searchResults)
+                if (lookupSearchMode() == "recipe") {
+                    data.sort(lookupSortMode())
+                }
+
                 setSearchResults(data)
                 setLoading(false)
             }
         }
 
         fetchData()
-    }, [query, searchMode])
+    }, [query, searchMode, sortMode])
 
     const defaultPostPhoto = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg"
     const defaultProfilePhoto = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
@@ -199,42 +125,65 @@ const SearchResults = () => {
                 setSelected={setSearchMode}
                 alignSelf="center"
             />
-            <ScrollContainer width="92vw" height="63vh">
-                <ResultsContainer $viewMode={searchMode}>
-                    {
-                        loading ?
-                            <AlertHeading>loading...</AlertHeading> :
-                        searchResults.length <= 0 ?
-                            <AlertHeading>{`no ${lookupSearchMode()}s found!`}</AlertHeading> :
-                        searchMode === 0 ?
-                            searchResults.map(res => {
-                                const formattedRes = res as RecipeResult
-
-                                return <RecipeCard
-                                    id={formattedRes.id}
-                                    title={formattedRes.title}
-                                    poster={formattedRes.poster}
-                                    images={
-                                        formattedRes.images && formattedRes.images.length > 0 ?
-                                            formattedRes.images :
-                                            [defaultPostPhoto]
-                                    }
+            <ResultsContainerWrapper>
+                {lookupSearchMode() == "recipe" ?
+                <SortFilterContainer>
+                    <div>
+                        <SortFilterHeading>sort!</SortFilterHeading>
+                        {sortOptions.map(sortOption =>
+                            <RadioButtonContainer onClick={() => setSortMode(sortOption)}>
+                                <RadioButton
+                                    type={"radio"}
+                                    value={sortOption}
+                                    checked={sortMode == sortOption}
+                                    onChange={e => setSortMode(e.target.value)}
+                                    name={sortOption}
+                                    disabled={searchMode !== 0}
                                 />
-                            }) :
-                        searchMode === 1 ?
-                            searchResults.map(res => {
-                                const formattedRes = res as UserResult
+                                <label htmlFor={sortOption}>{sortOption}</label>
+                            </RadioButtonContainer>
+                        )}
+                    </div>
+                    {/* <div>
+                        <SortFilterHeading>filter!</SortFilterHeading>
+                    </div> */}
+                </SortFilterContainer>
+                : <></>}
+                <ScrollContainer width="92vw" height="63vh">
+                    <ResultsContainer $viewMode={searchMode}>
+                        {
+                            loading ?
+                                <AlertHeading>loading...</AlertHeading> :
+                            searchResults.length <= 0 ?
+                                <AlertHeading>{`no ${lookupSearchMode()}s found!`}</AlertHeading> :
+                            searchMode === 0 ?
+                                searchResults.map(res => {
+                                    const {images, ...rest} = res as RecipeResult
 
-                                return <UserCard
-                                    username={formattedRes.username}
-                                    profilePhoto={formattedRes.profilePhoto || defaultProfilePhoto}
-                                />
-                            }) :
-                        // Wrong search mode!
-                            <></>
-                    }
-                </ResultsContainer>
-            </ScrollContainer>
+                                    return <RecipeCard
+                                        images={
+                                            images && images.length > 0 ?
+                                                images :
+                                                [defaultPostPhoto]
+                                        }
+                                        {...rest}
+                                    />
+                                }) :
+                            searchMode === 1 ?
+                                searchResults.map(res => {
+                                    const formattedRes = res as UserResult
+
+                                    return <UserCard
+                                        username={formattedRes.username}
+                                        profilePhoto={formattedRes.profilePhoto || defaultProfilePhoto}
+                                    />
+                                }) :
+                            // Wrong search mode!
+                                <></>
+                        }
+                    </ResultsContainer>
+                </ScrollContainer>
+            </ResultsContainerWrapper>
         </Container>
     )
 }

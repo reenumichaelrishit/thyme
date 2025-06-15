@@ -7,6 +7,7 @@ import { UserHeading, UserInfo, PostOptionsButton, TitleAndDesc } from "./styled
 import Menu from "../Menu";
 import Chips from "../Chips";
 import { useAuth } from "../../AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export interface PostProps {
     id: string,
@@ -77,6 +78,7 @@ const Post = (props: CompletePostProps) => {
     const [liked, setLiked] = useState(initiallyLiked)
     const [saved, setSaved] = useState(initiallySaved)
 
+    // Refresh in case of like or save button pressed (to update count)
     useEffect(() => {
         props.refresh && props.refresh()
     }, [liked, saved])
@@ -103,14 +105,25 @@ export const PostHeader = forwardRef((props: { poster: string, profilePhoto: str
     const showProfileOptionsMenu = () => setViewProfileOptionsMenu(true)
     const hideProfileOptionsMenu = () => setTimeout(() => setViewProfileOptionsMenu(false), 250)
 
-    const { username } = useAuth()
+    const { username, authToken } = useAuth()
+    const navigate = useNavigate()
+
+    const goToProfile = () => navigate(`/profile/${props.poster}`)
 
     return (
         <UserHeading ref={ref}>
             <UserInfo>
-                <img src={props.profilePhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}/>
-                <span>@{props.poster}</span>
-                <FollowButton following={/*props.notFollowing*/false} />
+                <img
+                    src={props.profilePhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
+                    alt={`profile photo of ${props.poster}`}
+                    onClick={goToProfile}
+                    style={{ cursor: "pointer" }}
+                />
+                <span onClick={goToProfile} style={{ cursor: "pointer" }}>@{props.poster}</span>
+                {!authToken || props.poster === username ?
+                    <></> :
+                    <FollowButton recipient={props.poster} />
+                }
             </UserInfo>
             <PostOptionsButton onMouseEnter={showProfileOptionsMenu} onMouseLeave={hideProfileOptionsMenu}>
                 <DotsThree size={16} weight="bold" />
