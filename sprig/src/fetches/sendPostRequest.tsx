@@ -1,6 +1,6 @@
 export async function sendPostRequest(url: string, payload: Record<string, unknown>) {
     try {
-        const response = await fetch("http://localhost:3000"+url, {
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

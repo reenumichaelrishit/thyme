@@ -98,9 +98,10 @@ export const TitleAndDesc = styled.div`
     row-gap: 2vh;
 
     h2 {
-        font-size: 3em;
+        font-size: 2.5em;
         font-family: ${p => p.theme.fontFamily.heading};
         color: ${p => p.theme.color.heading.default};
+        line-height: 1.2;
     }
 `
 
@@ -151,7 +152,7 @@ export const NutritionRow = styled.div`
 export const PostImage = styled.img`
     width: 100%;
     object-fit: cover;
-    max-height: 60vh;
+    max-height: 40vh;
     border-radius: 15px;
 `
 

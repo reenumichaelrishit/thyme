@@ -19,8 +19,8 @@ const ChipsContainer = styled.div`
     width: 100%;
     height: fit-content;
     display: flex;
-    row-gap: 1em;
-    column-gap: 1em;
+    row-gap: 0.5rem;
+    column-gap: 0.75rem;
     flex-wrap: wrap;
 `
 

@@ -7,6 +7,7 @@ import { UserHeading, UserInfo, PostOptionsButton, TitleAndDesc } from "./styled
 import Menu from "../Menu";
 import Chips from "../Chips";
 import { useAuth } from "../../AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export interface PostProps {
     id: string,
@@ -105,12 +106,19 @@ export const PostHeader = forwardRef((props: { poster: string, profilePhoto: str
     const hideProfileOptionsMenu = () => setTimeout(() => setViewProfileOptionsMenu(false), 250)
 
     const { username, authToken } = useAuth()
+    const navigate = useNavigate()
+
+    const goToProfile = () => navigate(`/profile/${props.poster}`)
 
     return (
         <UserHeading ref={ref}>
             <UserInfo>
-                <img src={props.profilePhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}/>
-                <span>@{props.poster}</span>
+                <img
+                    src={props.profilePhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
+                    alt={`profile photo of ${props.poster}`}
+                    onClick={goToProfile}
+                />
+                <span onClick={goToProfile}>@{props.poster}</span>
                 {!authToken || props.poster === username ?
                     <></> :
                     <FollowButton recipient={props.poster} />
