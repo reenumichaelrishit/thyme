@@ -101,7 +101,10 @@ const SearchResults = () => {
             if (data.error) {
                 console.error("could not fetch search results!", data.error)
             } else {
-                data.sort(lookupSortMode())
+                if (lookupSearchMode() == "recipe") {
+                    data.sort(lookupSortMode())
+                }
+
                 setSearchResults(data)
                 setLoading(false)
             }
@@ -123,6 +126,7 @@ const SearchResults = () => {
                 alignSelf="center"
             />
             <ResultsContainerWrapper>
+                {lookupSearchMode() == "recipe" ?
                 <SortFilterContainer>
                     <div>
                         <SortFilterHeading>sort!</SortFilterHeading>
@@ -144,6 +148,7 @@ const SearchResults = () => {
                         <SortFilterHeading>filter!</SortFilterHeading>
                     </div> */}
                 </SortFilterContainer>
+                : <></>}
                 <ScrollContainer width="92vw" height="63vh">
                     <ResultsContainer $viewMode={searchMode}>
                         {
