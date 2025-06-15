@@ -15,5 +15,18 @@ GET http://localhost:3000/api/profile/michael_chef
 
 {}
 
+### This is a comment
+POST http://localhost:3000/api/settings/email
+Content-Type: application/json
+
+{ "username": "michael_chef", "newEmail": "sample@sample.com" }
+
+
+### This is a comment
+GET http://localhost:3000/api/profile/followees/rohaaliii
+Content-Type: application/json
+
+{}
+
 
 

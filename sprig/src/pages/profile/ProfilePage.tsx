@@ -9,6 +9,11 @@ import Modal from "../../components/Modal";
 import {sendGetRequest} from "../../fetches/sendGetRequest.tsx";
 import {Link, useParams} from "react-router-dom";
 import {useAuth} from "../../AuthContext.ts";
+const FriendsGrid = styled.div `
+    display: grid;
+    grid-template-columns:1fr 1fr;
+    width:100%;
+`
 const Grids = styled.div<{ $ownProfile?: boolean }>
 `
     min-height: ${props => props.$ownProfile ? "90vh" : "50vh"};
@@ -53,6 +58,7 @@ const HorizontalScrollContainer = (props: { height: string, scrollOffset: number
 const TestDiv = styled.div `
     display: inline-block;
     min-width: 19vw;
+    max-width: 19vw;
 `
 
 const SavedPosts = styled.div `
@@ -90,19 +96,22 @@ const ProfilePage = (props: {
                 SavedPosts:Array<{
                     Posts:{
                         "title": string
+                        "images":string[],
                         "id":string,
                         "poster":string
                     }
                 }>,
                 Likes:Array<{
                     Posts: {
-                        "title": string
+                        "title": string,
+                        "images":string[],
                         "id":string,
                         "poster":string
                     }
                 }>,
                 posts:Array<{
                     "title": string,
+                    "images":string[],
                     "id":string,
                     "poster":string
                 }>
@@ -114,6 +123,20 @@ const ProfilePage = (props: {
             Likes:[],
             posts:[]
         })
+        const [followerData, setFollowerData] = useState<
+            Array<{
+                follower:string;
+            }>
+        >(
+            []
+        );
+        const [followeeData, setFolloweeData] = useState<
+            Array<{
+                followee:string;
+            }>
+        >(
+            []
+        )
         const openSearchRes = () => setSearchRes(true)
         const closeSearchRes : MouseEventHandler = (e) => { if (e.target === e.currentTarget) setSearchRes(false) }
 
@@ -136,32 +159,74 @@ const ProfilePage = (props: {
                     console.error("Cannot fetch user data useEffect.",username, res)
                 }
                 else {
-                    console.log("USEEFFECT WORKED LETS FUCKING GO")
                     setUserData(res)
                 }
             }
 
             fetchData()
             }, []);
+    useEffect(()=>{
+        const fetchData = async () => {
+            const res = await sendGetRequest(`/api/profile/followers/${username}`)
+
+            if(res.error) {
+                console.error("Cannot fetch follower data useEffect.",username, res)
+            }
+            else {
+                setFollowerData(res)
+            }
+        }
+
+        fetchData()
+    }, []);
+    useEffect(()=>{
+        const fetchData = async () => {
+            const res = await sendGetRequest(`/api/profile/followees/${username}`)
+
+            if(res.error) {
+                console.error("Cannot fetch followee data useEffect.",username, res)
+            }
+            else {
+                setFolloweeData(res)
+            }
+        }
+
+        fetchData()
+    }, []);
 
 
 
         return (
         <>
         <Modal heading={"Friends"} show={searchRes} turnOff={closeSearchRes} >
-            {/*{userData.friends.map(post =>*/}
-            {/*    <Link to={`/post/${post.id}`}>*/}
-
-            {/*    </Link>*/}
-            {/*)}*/}
+            <FriendsGrid>
+            <div style={{gridColumn:1}}>
+            <h3>Followers:</h3>
+            {followerData.map(follower =>
+                <Link to={`/profile/${follower.follower}`}>
+                    {follower.follower}
+                </Link>
+            )}
+            </div>
+            <div style={{gridColumn:2}}>
+            <h3>Followees:</h3>
+            {followeeData.map(followee =>
+                <Link to={`/profile/${followee.followee}`}>
+                    {followee.followee}
+                </Link>
+            )}
+            </div>
+            </FriendsGrid>
         </Modal>
         <ScrollContainer>
             <Grids $ownProfile={props.ownProfile? true: false} >
-            <img src={"https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"}
+            <img src={userData.profilePhoto}
+                 alt = {"profile Photo"}
                  style= {{
                         gridColumn: "1",
                         gridRow: "1 / 2",
-                        width: "15vw"
+                        width: "15vw",
+                        height: "15vw"
             }} />
             
             <Description>
@@ -171,12 +236,6 @@ const ProfilePage = (props: {
                 <h3>
                     {userData.bio}
                 </h3>
-                {props.ownProfile ?
-                    <button 
-                        style={{border: "none", background: "none", justifySelf: "center", alignSelf: "center"}}
-                        type="button">
-                        <u>edit</u>
-                    </button>: <div/>}
             </Description>
             <FriendsButton>
                     <button 
@@ -195,7 +254,7 @@ const ProfilePage = (props: {
                                         scrollOffset={200}>
                     {userData.posts.map(post =>
                         <Link to={`/post/${post.id}`}>
-                        <TestDiv><PhotoWindow title = {post.title} posterUsername={post.poster} /></TestDiv>
+                        <TestDiv><PhotoWindow image={post.images[0]} title = {post.title} posterUsername={post.poster} /></TestDiv>
                         </Link>
                     )}
                 </HorizontalScrollContainer>
@@ -208,7 +267,7 @@ const ProfilePage = (props: {
                     {userData.SavedPosts.map((entry) =>
                             <TestDiv>
                                 <Link to={`/post/${entry.Posts.id}`}>
-                                <PhotoWindow title={entry.Posts.title} posterUsername={entry.Posts.poster} />
+                                <PhotoWindow image={entry.Posts.images[0]} title={entry.Posts.title} posterUsername={entry.Posts.poster} />
                                 </Link>
                             </TestDiv>
                     )}
@@ -223,7 +282,7 @@ const ProfilePage = (props: {
 
                             <TestDiv>
                                 <Link to={`/post/${entry.Posts.id}`}>
-                                <PhotoWindow title={entry.Posts.title} posterUsername={entry.Posts.poster}/>
+                                <PhotoWindow image={entry.Posts.images[0]} title={entry.Posts.title} posterUsername={entry.Posts.poster}/>
                                 </Link>
                             </TestDiv>
                         )}
