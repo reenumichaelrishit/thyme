@@ -15,14 +15,16 @@ export function registerSearchRoutes(app: express.Application, sbClient: Supabas
         const { type, query } = req.params;
         const searchP = new SearchProvider(sbClient);
 
+        const searchQuery = query == "undefined" ? "" : query
+
         let result;
 
         switch (type) {
             case "recipe":
-                result = await searchP.searchPosts(query);
+                result = await searchP.searchPosts(searchQuery);
                 break;
             case "user":
-                result = await searchP.searchUsers(query);
+                result = await searchP.searchUsers(searchQuery);
                 break;
             default:
                 // "type" param is not a valid type

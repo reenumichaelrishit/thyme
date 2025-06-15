@@ -77,6 +77,7 @@ const Post = (props: CompletePostProps) => {
     const [liked, setLiked] = useState(initiallyLiked)
     const [saved, setSaved] = useState(initiallySaved)
 
+    // Refresh in case of like or save button pressed (to update count)
     useEffect(() => {
         props.refresh && props.refresh()
     }, [liked, saved])
@@ -103,14 +104,17 @@ export const PostHeader = forwardRef((props: { poster: string, profilePhoto: str
     const showProfileOptionsMenu = () => setViewProfileOptionsMenu(true)
     const hideProfileOptionsMenu = () => setTimeout(() => setViewProfileOptionsMenu(false), 250)
 
-    const { username } = useAuth()
+    const { username, authToken } = useAuth()
 
     return (
         <UserHeading ref={ref}>
             <UserInfo>
                 <img src={props.profilePhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}/>
                 <span>@{props.poster}</span>
-                <FollowButton following={/*props.notFollowing*/false} />
+                {!authToken || props.poster === username ?
+                    <></> :
+                    <FollowButton recipient={props.poster} />
+                }
             </UserInfo>
             <PostOptionsButton onMouseEnter={showProfileOptionsMenu} onMouseLeave={hideProfileOptionsMenu}>
                 <DotsThree size={16} weight="bold" />

@@ -1,6 +1,6 @@
 export async function sendGetRequest(url: string) {
     try {
-        const response = await fetch(url);
+        const response = await fetch("http://localhost:3000"+url);
 
         const data = await response.json();
 
