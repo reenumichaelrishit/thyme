@@ -6,6 +6,7 @@ import { registerAuthRoutes, verifyAuthToken} from "./routes/auth";
 import { registerPostsRoutes } from "./routes/posts";
 import { registerSearchRoutes } from "./routes/search";
 import {registerProfileRoutes} from "./routes/profile";
+import {registerSettingsRoutes} from "./routes/settings";
 
 const cors = require("cors");
 
@@ -36,6 +37,7 @@ registerAuthRoutes(app, supabase);
 registerPostsRoutes(app, supabase);
 registerSearchRoutes(app, supabase);
 registerProfileRoutes(app, supabase);
+registerSettingsRoutes(app, supabase);
 
 app.get("/hello", (req: Request, res: Response) => {
     res.send("Hello, World");

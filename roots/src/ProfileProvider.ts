@@ -67,6 +67,15 @@ export class ProfileProvider {
     async getFollowers(username: string) {
         const { data, error } = await this.sb.from(this.followerPairsTableName)
             .select()
+            .eq("followee", username)
+        if (error) throw new Error("Can't find user's posts");
+
+        return data;
+    }
+
+    async getFollowees(username: string) {
+        const { data, error } = await this.sb.from(this.followerPairsTableName)
+            .select()
             .eq("follower", username)
         if (error) throw new Error("Can't find user's posts");
 
