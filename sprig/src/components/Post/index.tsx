@@ -117,8 +117,9 @@ export const PostHeader = forwardRef((props: { poster: string, profilePhoto: str
                     src={props.profilePhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
                     alt={`profile photo of ${props.poster}`}
                     onClick={goToProfile}
+                    style={{ cursor: "pointer" }}
                 />
-                <span onClick={goToProfile}>@{props.poster}</span>
+                <span onClick={goToProfile} style={{ cursor: "pointer" }}>@{props.poster}</span>
                 {!authToken || props.poster === username ?
                     <></> :
                     <FollowButton recipient={props.poster} />

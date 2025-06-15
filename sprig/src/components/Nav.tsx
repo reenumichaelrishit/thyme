@@ -120,7 +120,7 @@ const Nav = () => {
                     </AddPostButton> :
                     <></>}
                 {authToken ?
-                    <ProfileButton onMouseEnter={openProfileMenu} onMouseLeave={closeProfileMenu}>
+                    <ProfileButton onMouseEnter={openProfileMenu} onMouseLeave={closeProfileMenu} onClick={() => navigate("/profile")}>
                         <img src={profilePhoto} alt="profile photo" />
                     </ProfileButton> :
                     <AddPostButton type="button" onClick={() => navigate("/login")}>

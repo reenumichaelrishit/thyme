@@ -23,13 +23,6 @@ const Grids = styled.div<{ $ownProfile?: boolean }>
     grid-template-rows: ${props => props.$ownProfile ? "1fr 1fr 1fr": "1fr 1fr"};
 `;
 
-const Description = styled.div `
-    grid-column: 2;
-    grid-row: 1;
-    align-self: center;
-    justify-self: center;
-`
-
 const HorizontalScrollContainer = (props: { height: string, scrollOffset: number, children: ReactNode }) => {
     const scrollRef = useRef<Scrollbars>(null)
 
@@ -77,12 +70,56 @@ const LikedPosts = styled.div `
     grid-column-gap: 10px
 `
 
-const FriendsButton = styled.div `
-    grid-column: 3;
-    grid-row: 1;
-    align-self: center;
-    justify-self: center;
+const Header = styled.div`
+    grid-column: 1 / span 3;
+    display: flex;
+    align-items: center;
+    column-gap: 5vw;
+    padding: 0 2.5vw;
+    border-radius: 15px;
+    margin-bottom: 5vh;
+    background-color: ${p => p.theme.background.accent.default};
 
+    img {
+        aspect-ratio: 1 / 1;
+        width: 10vw;
+        height: auto;
+        border-radius: 50%;
+    }
+`
+
+const UserInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    h1 {
+        font-size: 2em;
+        font-family: ${p => p.theme.fontFamily.heading};
+        color: ${p => p.theme.color.heading.default};
+    }
+
+    span {
+        font-size: 1.125em;
+        color: ${p => p.theme.color.subheading.default};
+    }
+`
+
+const HeaderButton = styled.button`
+    border: none;
+    border-radius: 25px;
+    font-size: 1.125em;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    font-family: ${p => p.theme.fontFamily.heading};
+    background-color: ${p => p.theme.background.backdrop.default};
+    color: ${p => p.theme.color.subheading.default};
+    cursor: pointer;
+    transition: background-color ${p => p.theme.transition.default};
+
+    &:hover {background-color: ${p => p.theme.background.backdrop.hover};}
+    &:active {background-color: ${p => p.theme.background.backdrop.active};}
 `
 
 const ProfilePage = (props: {
@@ -143,15 +180,7 @@ const ProfilePage = (props: {
         const params = useParams() as { username: string };
         const authUsername = useAuth();
         const username = props.ownProfile ? authUsername.username : params.username;
-        useEffect(()=>{
-                // sendGetRequest(`api/profile/${username}`).then((res)=>{
-                //     if(res.error) {
-                //         console.error("Cannot fetch user data useEffect.",username, res)
-                //     }
-                //     else {
-                //         setUserData(res)
-                //     }
-                // })
+        useEffect(() => {
             const fetchData = async () => {
                 const res = await sendGetRequest(`/api/profile/${username}`)
 
@@ -191,8 +220,8 @@ const ProfilePage = (props: {
             }
         }
 
-        fetchData()
-    }, []);
+            fetchData()
+            }, []);
 
 
 
@@ -220,33 +249,18 @@ const ProfilePage = (props: {
         </Modal>
         <ScrollContainer>
             <Grids $ownProfile={props.ownProfile? true: false} >
-            <img src={userData.profilePhoto}
-                 alt = {"profile Photo"}
-                 style= {{
-                        gridColumn: "1",
-                        gridRow: "1 / 2",
-                        width: "15vw",
-                        height: "15vw"
-            }} />
-            
-            <Description>
-                <h1>
-                    {username}
-                </h1>
-                <h3>
-                    {userData.bio}
-                </h3>
-            </Description>
-            <FriendsButton>
-                    <button 
-                        style={{border: "none", background: "none"}}
+                <Header>
+                    <img src={userData.profilePhoto} alt = {"profile Photo"} />
+                    <UserInfo>
+                        <h1>{username}</h1>
+                        <span>{userData.bio}</span>
+                    </UserInfo>
+                    <HeaderButton
                         type="button"
                         onClick={openSearchRes}>
-                        <p style={{fontSize: "3em"}}>
-                            <u>Friends</u>
-                        </p>
-                    </button>
-            </FriendsButton>
+                        followers & following
+                    </HeaderButton>
+                </Header>
             <UserPosts>
                 {props.ownProfile ? <h2 style={{alignSelf: "center", justifySelf: "center"}}>Your Posts</h2> :
                                 <h2 style={{alignSelf: "center", justifySelf: "center"}}>{username}'s Posts</h2>}
